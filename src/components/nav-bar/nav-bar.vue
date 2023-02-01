@@ -15,7 +15,9 @@
       </view>
       <view class="right">
         <!-- #ifndef MP-WEIXIN -->
-        <slot name="right"></slot>
+        <slot name="right">
+          <view class="iconfont icon-menu"></view>
+        </slot>
         <!-- #endif -->
       </view>
     </view>
@@ -45,16 +47,18 @@ const contentHeight = ref('44px')
     height: v-bind('contentHeight');
     line-height: v-bind('contentHeight');
     .iconfont {
-      font-size: 60rpx;
+      font-size: 50rpx;
     }
     .right,
     .left {
       text-align: center;
-      width: 20%;
+      width: 12%;
     }
     .center {
       flex: 1;
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 }
