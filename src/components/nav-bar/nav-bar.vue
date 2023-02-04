@@ -11,14 +11,15 @@
         </slot>
       </view>
       <view class="center">
-        <slot name="center"> </slot>
+        <slot name="center">
+          <view class="iconfont icon-sousuo search"></view
+          ><input class="input" :placeholder="tip" />
+        </slot>
       </view>
       <view class="right">
-        <!-- #ifndef MP-WEIXIN -->
         <slot name="right">
-          <view class="iconfont icon-menu"></view>
+          <view class="iconfont icon-yuyin"></view>
         </slot>
-        <!-- #endif -->
       </view>
     </view>
   </view>
@@ -26,7 +27,14 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-
+withDefaults(
+  defineProps<{
+    tip: string
+  }>(),
+  {
+    tip: '等待操作'
+  }
+)
 const res = uni.getSystemInfoSync()
 const statusBarHeight = ref(res.statusBarHeight + 'px')
 const contentHeight = ref('44px')
@@ -46,19 +54,35 @@ const contentHeight = ref('44px')
     justify-content: space-between;
     height: v-bind('contentHeight');
     line-height: v-bind('contentHeight');
-    .iconfont {
-      font-size: 50rpx;
-    }
+
     .right,
     .left {
       text-align: center;
       width: 12%;
+      .iconfont {
+        font-size: 50rpx;
+      }
     }
     .center {
+      position: relative;
+      left: 0;
       flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
+      color: #858ca7;
+      .search {
+        position: absolute;
+        left: 10px;
+      }
+      .input {
+        width: 100%;
+        height: 30px;
+        padding: 0 30px;
+        font-size: 12px;
+        border-radius: 20px;
+        background: linear-gradient(to right, #d8dbfa, #f3d7ee);
+      }
     }
   }
 }

@@ -1,24 +1,25 @@
 <template>
   <view class="content">
-    <nav-bar>
-      <template #center>
-        <input class="uni-input" placeholder="自动获得焦点" />
-      </template>
-    </nav-bar>
+    <nav-bar :tip="'推荐的数据'"> </nav-bar>
+    <my-swiper height="350px" indicator="bottomLeft" :list="list"></my-swiper>
+    <view class="main"> </view>
   </view>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue'
+import { getIndexBannerService } from '@/service/index/index'
+const list = ref([])
+
+getIndexBannerService().then((res: any) => {
+  list.value = res.banners.map((item: any) => {
+    return { image: item.pic, title: item.typeTitle }
+  })
+})
+</script>
 
 <style lang="scss" scpoed>
-.uni-input {
-  box-sizing: border-box;
-  width: 100%;
-  height: 32px;
-  padding: 10px 20px;
-  color: #858ca7;
-  font-size: 12px;
-  border-radius: 20px;
-  background: linear-gradient(to right, #d8dbfa, #f3d7ee);
+.main {
+  // padding: 0 20rpx;
 }
 </style>
