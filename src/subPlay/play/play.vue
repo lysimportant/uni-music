@@ -39,7 +39,37 @@
           mode="heightFix"
         />
       </view>
-      <view class="operation"></view>
+      <view class="operation">
+        <view class="interaction">1</view>
+        <view class="status">2</view>
+        <view class="controller">
+          <template v-for="(item, index) of playStatus" :key="item.mdoel">
+            <text
+              v-if="currentStatus === index"
+              class="model"
+              :class="item.model"
+              @click="showModel()"
+            ></text>
+          </template>
+          <template v-for="(item, index) of controllerIcons" :key="item">
+            <template v-if="index === 1 || index === 2">
+              <text
+                v-if="item === 'icon-zanting play' && isPlayer"
+                :class="item"
+                @click="musicStore.toggleMusicAction"
+              ></text>
+              <text
+                v-if="item === 'icon-bofang play' && !isPlayer"
+                @click="musicStore.toggleMusicAction"
+                :class="item"
+              ></text>
+            </template>
+            <template v-else>
+              <text :class="item"></text>
+            </template>
+          </template>
+        </view>
+      </view>
     </view>
   </view>
 </template>
@@ -50,8 +80,37 @@ import { storeToRefs } from "pinia";
 import gan from "@/static/play/gan.png";
 import pan from "@/static/play/pan.png";
 const musicStore = useMusicStore();
-const { currentMusic, isPlayer } = storeToRefs(musicStore);
-console.log(pan, gan);
+const { currentMusic, isPlayer, currentStatus } = storeToRefs(musicStore);
+function showModel() {
+  currentStatus.value++;
+  if (currentStatus.value >= 3) currentStatus.value = 0;
+  uni.showToast({
+    icon: "success",
+    title: playStatus[currentStatus.value].msg
+  });
+}
+const playStatus = [
+  {
+    model: "icon-loop",
+    msg: "单曲循环"
+  },
+  {
+    model: "icon-circulation",
+    msg: "列表循环"
+  },
+  {
+    model: "icon-random",
+    msg: "随机播放"
+  }
+];
+
+const controllerIcons = [
+  "icon-per",
+  "icon-zanting play",
+  "icon-bofang play",
+  "icon-next",
+  "icon-24gf-playlist list"
+];
 function backClick() {
   uni.navigateBack();
 }
@@ -139,8 +198,40 @@ export default {
       }
     }
     .operation {
+      position: relative;
       height: 15%;
-      // background-color: skyblue;
+
+      .interaction {
+        background-color: pink;
+      }
+      .status {
+        background-color: skyblue;
+      }
+      .controller {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        // justify-content: space-evenly;
+        align-items: center;
+        height: 180rpx;
+        color: #ccc;
+        padding-left: 9%;
+        text {
+          width: 15%;
+          font-size: 50rpx;
+          margin: 0 10rpx;
+          text-align: center;
+        }
+        .play {
+          color: #fff;
+          font-size: 80rpx !important;
+        }
+        .list {
+          font-size: 45rpx;
+        }
+      }
     }
   }
 }

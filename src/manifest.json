@@ -62,7 +62,9 @@
       "scope.userLocation": {
         "desc": "音乐播放"
       }
+		
     }
+		
   },
   "mp-alipay": {
     "usingComponents": true
@@ -81,6 +83,11 @@
     "title": "music",
     "devServer": {
       "https": false
-    }
+    },
+		"optimization": {
+			"treeShaking": {
+				"enable": true
+			}
+		}
   }
 }

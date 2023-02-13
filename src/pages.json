@@ -52,6 +52,12 @@
       ]
     }
   ],
+  "preloadRule": {
+    "pages/index/index": {
+      "network": "all",
+      "packages": ["subPlay"]
+    }
+  },
   "requiredBackgroundModes": ["audio", "location"],
   "requiredPrivateInfos": [
     "onLocationChange",

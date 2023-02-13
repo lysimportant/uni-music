@@ -15,6 +15,7 @@ interface IMusicStore {
   };
   isPlayer: boolean;
   onlyOne: boolean;
+  currentStatus: number;
 }
 
 const useMusicStore = defineStore("music", {
@@ -28,7 +29,8 @@ const useMusicStore = defineStore("music", {
         url: "https://m801.music.126.net/20230212222059/7843dc1db531a514241c8a93b0027cdd/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/24668927240/3e8c/a695/2e50/fbf8d60610fb5f8336c9a34a68736239.mp3"
       },
       isPlayer: false,
-      onlyOne: false
+      onlyOne: false,
+      currentStatus: 0
     };
   },
   actions: {
