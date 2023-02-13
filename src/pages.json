@@ -38,6 +38,20 @@
       }
     }
   ],
+  "subPackages": [
+    {
+      "root": "subPlay",
+      "pages": [
+        {
+          "path": "play/play",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        }
+      ]
+    }
+  ],
   "requiredBackgroundModes": ["audio", "location"],
   "requiredPrivateInfos": [
     "onLocationChange",

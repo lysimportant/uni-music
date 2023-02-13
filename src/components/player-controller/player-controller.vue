@@ -1,12 +1,13 @@
 <template>
   <view class="player-controller">
     <view
+      @click="handleJumpPage"
       class="pic-url animation_rotate"
       :style="{ 'animation-play-state': isPlayer ? 'running' : 'paused' }"
     >
       <image class="image" :src="currentMusic.picUrl" mode="heightFix" />
     </view>
-    <view class="info">
+    <view class="info" @click="handleJumpPage">
       <text class="song-name">
         {{ currentMusic.name }}
       </text>
@@ -27,14 +28,25 @@
 <script setup lang="ts">
 import { useMusicStore } from "@/store";
 import { storeToRefs } from "pinia";
-import { toggleMusic } from "@/utils/audio";
+
 const musicStore = useMusicStore();
 const { currentMusic, isPlayer } = storeToRefs(musicStore);
 
-function operation() {
-  toggleMusic((flag) => {
-    isPlayer.value = flag;
+function handleJumpPage() {
+  // uni.switchTab()
+
+  uni.navigateTo({
+    url: "/subPlay/play/play",
+    success(info) {
+      console.log("跳转成功！", info);
+    },
+    fail(err) {
+      console.log("跳转失败！", err);
+    }
   });
+}
+function operation() {
+  musicStore.toggleMusicAction();
 }
 </script>
 <script lang="ts">
@@ -76,7 +88,7 @@ export default {
     flex: 1;
     .author-name {
       color: #7d818a;
-      font-size: 20rpx;
+      // font-size: 20rpx;
     }
   }
 

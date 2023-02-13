@@ -30,18 +30,21 @@ import { ref } from "vue";
 withDefaults(
   defineProps<{
     tip?: string;
+    contentHeight?: string;
   }>(),
   {
-    tip: "等待操作"
+    tip: "等待操作",
+    contentHeight: "44px"
   }
 );
 const res = uni.getSystemInfoSync();
 const statusBarHeight = ref(res.statusBarHeight + "px");
-const contentHeight = ref("44px");
 </script>
 
 <style lang="scss" scoped>
 .nav-bar {
+  position: relative;
+  z-index: 2;
   .placeholder {
     height: v-bind("statusBarHeight");
   }

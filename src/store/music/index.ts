@@ -4,7 +4,7 @@ import {
   getMusicDetailByIdService
 } from "@/service/music";
 import { defineStore } from "pinia";
-import player, { playMusic, startMusic } from "@/utils/audio";
+import player, { loadMusic, playMusic, pauseMusic } from "@/utils/audio";
 
 interface IMusicStore {
   currentMusic: {
@@ -14,6 +14,7 @@ interface IMusicStore {
     picUrl: string;
   };
   isPlayer: boolean;
+  onlyOne: boolean;
 }
 
 const useMusicStore = defineStore("music", {
@@ -26,7 +27,8 @@ const useMusicStore = defineStore("music", {
           "https://p1.music.126.net/eMyCr0gv0kPGlew9XTNjyA==/109951163944178164.jpg",
         url: "https://m801.music.126.net/20230212222059/7843dc1db531a514241c8a93b0027cdd/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/24668927240/3e8c/a695/2e50/fbf8d60610fb5f8336c9a34a68736239.mp3"
       },
-      isPlayer: false
+      isPlayer: false,
+      onlyOne: false
     };
   },
   actions: {
@@ -60,18 +62,20 @@ const useMusicStore = defineStore("music", {
       // 准备播放
       getMusicURLByIdService(id).then((res) => {
         this.currentMusic.url = res.data[0].url;
-        playMusic(this.currentMusic, (falg) => {
+        loadMusic(this.currentMusic, (falg) => {
           this.isPlayer = falg;
         });
       });
     },
-    startMusicAction() {
-      player.src = this.currentMusic.url;
-      startMusic((flag) => {
-        this.isPlayer = flag;
-      });
+    toggleMusicAction() {
+      if (this.isPlayer) {
+        pauseMusic();
+        this.isPlayer = false;
+      } else {
+        playMusic();
+        this.isPlayer = true;
+      }
     }
   }
 });
-export type MusicType = typeof useMusicStore;
 export default useMusicStore;
