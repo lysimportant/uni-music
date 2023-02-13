@@ -14,21 +14,25 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    list: any[]
-    indicator?: string
-    height?: string
+    list: any[];
+    indicator?: string;
+    height?: string;
   }>(),
   {
     list: [] as any,
-    indicator: 'bottomCenter',
-    height: '250'
+    indicator: "bottomCenter",
+    height: "250"
   }
-)
+);
 </script>
 
 <style lang="scss" scoped>
 .my-swiper {
-  background-image: linear-gradient(#e6e4fa, #ffffff);
   padding: 0 20rpx;
+  overflow: hidden;
+  .u-swiper-wrap {
+    background-color: #fff;
+    margin-top: 20rpx;
+  }
 }
 </style>

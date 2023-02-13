@@ -1,5 +1,5 @@
 <template>
-  <view class="nav-bar bg">
+  <view class="nav-bar">
     <!-- #ifdef MP-WEIXIN || APP-PLUS -->
     <view class="placeholder" />
     <!-- #endif -->
@@ -12,8 +12,8 @@
       </view>
       <view class="center">
         <slot name="center">
-          <view class="iconfont icon-sousuo search"></view
-          ><input class="input" :placeholder="tip" />
+          <view class="iconfont icon-sousuo my-search"></view
+          ><input class="my-input" :placeholder="tip" />
         </slot>
       </view>
       <view class="right">
@@ -26,56 +26,52 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 withDefaults(
   defineProps<{
-    tip: string
+    tip?: string;
   }>(),
   {
-    tip: '等待操作'
+    tip: "等待操作"
   }
-)
-const res = uni.getSystemInfoSync()
-const statusBarHeight = ref(res.statusBarHeight + 'px')
-const contentHeight = ref('44px')
+);
+const res = uni.getSystemInfoSync();
+const statusBarHeight = ref(res.statusBarHeight + "px");
+const contentHeight = ref("44px");
 </script>
 
-<style lang="scss">
-.bg {
-  background: linear-gradient(to right, #e7e5fb, #f7eaf4);
-}
-
+<style lang="scss" scoped>
 .nav-bar {
   .placeholder {
-    height: v-bind('statusBarHeight');
+    height: v-bind("statusBarHeight");
   }
   .content {
     display: flex;
     justify-content: space-between;
-    height: v-bind('contentHeight');
-    line-height: v-bind('contentHeight');
+    height: v-bind("contentHeight");
+    line-height: v-bind("contentHeight");
 
     .right,
     .left {
       text-align: center;
       width: 12%;
       .iconfont {
-        font-size: 50rpx;
+        font-size: 55rpx;
       }
     }
     .center {
       position: relative;
-      left: 0;
+      // left: 0;
       flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
       color: #858ca7;
-      .search {
+      .my-search {
         position: absolute;
         left: 10px;
       }
-      .input {
+      .my-input {
         width: 100%;
         height: 30px;
         padding: 0 30px;

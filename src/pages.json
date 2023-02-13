@@ -1,89 +1,90 @@
 {
-	"pages": [
-		{
-			"path": "pages/index/index",
-			"style": {
-					"navigationStyle": "custom",
-					"backgroundColor": "#d81e06"
-			}
-		}
-	    ,{
-            "path" : "pages/podcast/podcast",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "播客",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/mine/mine",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "我的",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/attention/attention",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "关注",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/community/community",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "社区",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
-	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
-	},
-	"tabBar": {
-		"color": "#a6a6a6",
-		"selectedColor": "#d81e06",
-		"list": [
-			{
-				"text": "首页",
-				"iconPath": "static/tarbar/index.png",
-				"selectedIconPath": "static/tarbar/index-active.png",
-				"pagePath": "pages/index/index"
-			},
-			{
-				"text": "播客",
-				"iconPath": "static/tarbar/podcast.png",
-				"selectedIconPath": "static/tarbar/podcast-active.png",
-				"pagePath": "pages/podcast/podcast"
-			},
-			{
-				"text": "我的",
-				"iconPath": "static/tarbar/mini.png",
-				"selectedIconPath": "static/tarbar/mini-active.png",
-				"pagePath": "pages/mine/mine"
-			},
-			{
-				"text": "关注",
-				"iconPath": "static/tarbar/attention.png",
-				"selectedIconPath": "static/tarbar/attention-active.png",
-				"pagePath": "pages/attention/attention"
-			},
-			{
-				"text": "社区",
-				"iconPath": "static/tarbar/commnity.png",
-				"selectedIconPath": "static/tarbar/commnity-active.png",
-				"pagePath": "pages/community/community"
-			}
-		]
-	}
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true,
+        "backgroundColor": "#d81e06"
+      }
+    },
+    {
+      "path": "pages/podcast/podcast",
+      "style": {
+        "navigationBarTitleText": "播客",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/mine/mine",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/attention/attention",
+      "style": {
+        "navigationBarTitleText": "关注",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/community/community",
+      "style": {
+        "navigationBarTitleText": "社区",
+        "enablePullDownRefresh": false,
+        "navigationStyle": "custom"
+      }
+    }
+  ],
+  "requiredBackgroundModes": ["audio", "location"],
+  "requiredPrivateInfos": [
+    "onLocationChange",
+    "startLocationUpdateBackground",
+    "chooseAddress"
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#a6a6a6",
+    "backgroundColor": "#ffffff",
+    "selectedColor": "#d81e06",
+    "list": [
+      {
+        "text": "首页",
+        "iconPath": "static/tarbar/index.png",
+        "selectedIconPath": "static/tarbar/index-active.png",
+        "pagePath": "pages/index/index"
+      },
+      {
+        "text": "播客",
+        "iconPath": "static/tarbar/podcast.png",
+        "selectedIconPath": "static/tarbar/podcast-active.png",
+        "pagePath": "pages/podcast/podcast"
+      },
+      {
+        "text": "我的",
+        "iconPath": "static/tarbar/mini.png",
+        "selectedIconPath": "static/tarbar/mini-active.png",
+        "pagePath": "pages/mine/mine"
+      },
+      {
+        "text": "关注",
+        "iconPath": "static/tarbar/attention.png",
+        "selectedIconPath": "static/tarbar/attention-active.png",
+        "pagePath": "pages/attention/attention"
+      },
+      {
+        "text": "社区",
+        "iconPath": "static/tarbar/commnity.png",
+        "selectedIconPath": "static/tarbar/commnity-active.png",
+        "pagePath": "pages/community/community"
+      }
+    ]
+  }
 }

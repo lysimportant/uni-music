@@ -5,5 +5,9 @@
 
 **/*.svg
 **/*.sh
-
+/src/uni_modules/**
 /public/*
+
+.hbuilderx
+.vscode
+.idea

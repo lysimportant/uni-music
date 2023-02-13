@@ -1,47 +1,47 @@
-import type { Method } from './type'
+import type { Method } from "./type";
 interface RequestConfig {
-  baseURL: string
-  timeout: number
+  baseURL: string;
+  timeout: number;
   interceptor?: {
-    requert?: (config: any) => void
-    response?: (config: any) => void
-    error?: (err: any) => void
-  }
+    requert?: (config: any) => void;
+    response?: (config: any) => void;
+    error?: (err: any) => void;
+  };
 }
 class HJRequest {
-  private baseURL: string
-  private timeout: number
+  private baseURL: string;
+  private timeout: number;
   constructor(data: RequestConfig) {
-    this.baseURL = data.baseURL
-    this.timeout = data.timeout
-    uni.addInterceptor('request', {
+    this.baseURL = data.baseURL;
+    this.timeout = data.timeout;
+    uni.addInterceptor("request", {
       invoke: data.interceptor?.requert,
       success: data.interceptor?.response,
       fail: data.interceptor?.error
-    })
+    });
   }
-  request(method: Method, config: any) {
-    return new Promise((resolve, reject) => {
+  request<T = any>(method: Method, config: any) {
+    return new Promise<T>((resolve, reject) => {
       uni.request({
         method,
         url: this.baseURL + config.url,
         data: config.data,
         timeout: this.timeout,
-        success: (res) => {
-          resolve(res.data)
+        success: (res: any) => {
+          resolve(res.data);
         },
         fail: (error) => {
-          reject(error)
+          reject(error);
         }
-      })
-    })
+      });
+    });
   }
-  get(config: any) {
-    return this.request('GET', config)
+  get<T = any>(config: any) {
+    return this.request<T>("GET", config);
   }
-  post(config: any) {
-    return this.request('POST', config)
+  post<T = any>(config: any) {
+    return this.request<T>("POST", config);
   }
 }
 
-export default HJRequest
+export default HJRequest;
