@@ -37,7 +37,6 @@ export function pauseMusic(fn?: (flag: boolean) => void) {
   player.pause();
   fn?.(false);
 }
-
 /**
  * 暂停&播放切换 不兼容
  * @param fn 回调操作

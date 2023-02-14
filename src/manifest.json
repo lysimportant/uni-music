@@ -58,6 +58,7 @@
       "postcss": true
     },
     "usingComponents": true,
+		"requiredBackgroundModes": ["audio"],
     "permission": {
       "scope.userLocation": {
         "desc": "音乐播放"

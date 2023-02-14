@@ -40,8 +40,34 @@
         />
       </view>
       <view class="operation">
-        <view class="interaction">1</view>
-        <view class="status">2</view>
+        <view class="interaction"
+          >{{ duration / 10 }}--------------{{ currentTime }}</view
+        >
+        <view class="status">
+          <text>{{ formatCurrentTime(currentTime * 1000) }}</text>
+          <slider
+            class="slide"
+            :value="currentTime"
+            :max="duration"
+            @change="sliderChange"
+            activeColor="#cfcfcf"
+            backgroundColor="#949494"
+            block-color="#fff"
+            block-size="20"
+          />
+          <!-- <u-slider
+            v-model="currentTime"
+            active-color="#cfcfcf"
+            inactive-color="#949494"
+            :max="duration / 10"  
+            :use-slot="true"
+          >
+            <view class="">
+              <view class="badge-button"></view>
+            </view>
+          </u-slider> -->
+          <text>{{ formatMusicTotalTime }}</text>
+        </view>
         <view class="controller">
           <template v-for="(item, index) of playStatus" :key="item.mdoel">
             <text
@@ -75,12 +101,57 @@
 </template>
 
 <script setup lang="ts">
+import { computed, watch } from "vue";
 import { useMusicStore } from "@/store";
 import { storeToRefs } from "pinia";
 import gan from "@/static/play/gan.png";
 import pan from "@/static/play/pan.png";
+import { formatMusicTime } from "@/utils";
+import { playStatus, controllerIcons, backClick } from "./config";
+import player from "@/utils/audio";
 const musicStore = useMusicStore();
-const { currentMusic, isPlayer, currentStatus } = storeToRefs(musicStore);
+const { currentMusic, isPlayer, currentStatus, currentTime, duration } =
+  storeToRefs(musicStore);
+
+// 监听音乐进度
+function sliderChange(val) {
+  console.log("first  ", val);
+}
+let saveTimer: any = null;
+function timeFn() {
+  currentTime.value = player.currentTime;
+}
+
+watch(
+  () => isPlayer.value,
+  (n) => {
+    if (n) {
+      saveTimer = setInterval(timeFn, 1000);
+    } else {
+      clearInterval(saveTimer);
+      saveTimer = null;
+    }
+  },
+  {
+    deep: true,
+    immediate: true
+  }
+);
+
+watch(
+  () => currentTime.value,
+  (m) => {
+    console.log("first  m ---", m);
+  }
+);
+// 播放当前时间的进度
+const formatCurrentTime = computed(() => formatMusicTime);
+// 歌的总时长
+const formatMusicTotalTime = computed(() =>
+  formatMusicTime(currentMusic.value.dt)
+);
+
+// 切换模式显示
 function showModel() {
   currentStatus.value++;
   if (currentStatus.value >= 3) currentStatus.value = 0;
@@ -88,31 +159,6 @@ function showModel() {
     icon: "success",
     title: playStatus[currentStatus.value].msg
   });
-}
-const playStatus = [
-  {
-    model: "icon-loop",
-    msg: "单曲循环"
-  },
-  {
-    model: "icon-circulation",
-    msg: "列表循环"
-  },
-  {
-    model: "icon-random",
-    msg: "随机播放"
-  }
-];
-
-const controllerIcons = [
-  "icon-per",
-  "icon-zanting play",
-  "icon-bofang play",
-  "icon-next",
-  "icon-24gf-playlist list"
-];
-function backClick() {
-  uni.navigateBack();
 }
 </script>
 
@@ -205,7 +251,32 @@ export default {
         background-color: pink;
       }
       .status {
-        background-color: skyblue;
+        margin: 10rpx 0;
+        display: flex;
+        align-items: center;
+        .badge-button {
+          width: 10px;
+          height: 10px;
+          background-color: #fff;
+          border-radius: 50%;
+        }
+        & > text {
+          width: 15%;
+          text-align: center;
+        }
+        & > view {
+          padding: 0 10rpx;
+          flex: 1;
+        }
+        .slide {
+          flex: 1;
+        }
+        :deep(.u-slider) {
+          height: 1px;
+        }
+        :deep(.u-slider__gap) {
+          height: 1px !important;
+        }
       }
       .controller {
         position: absolute;

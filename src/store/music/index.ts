@@ -7,30 +7,42 @@ import { defineStore } from "pinia";
 import player, { loadMusic, playMusic, pauseMusic } from "@/utils/audio";
 
 interface IMusicStore {
+  // 当前音乐的信息
   currentMusic: {
     url: string;
     authorName: string[];
     name: string;
     picUrl: string;
+    dt: number;
   };
+  // 是否在播放
   isPlayer: boolean;
+  // 第一次播放
   onlyOne: boolean;
+  // 播放模式： 0 单曲 1 列表 2 随机
   currentStatus: number;
+  // 当前时间
+  currentTime: number;
+  // 总时长
+  duration: number;
 }
 
 const useMusicStore = defineStore("music", {
   state: (): IMusicStore => {
     return {
       currentMusic: {
-        authorName: ["洛天依", "ilem"],
-        name: "勾指起誓",
+        authorName: ["告五人"],
+        dt: 232128,
+        name: "带你飞",
         picUrl:
-          "https://p1.music.126.net/eMyCr0gv0kPGlew9XTNjyA==/109951163944178164.jpg",
-        url: "https://m801.music.126.net/20230212222059/7843dc1db531a514241c8a93b0027cdd/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/24668927240/3e8c/a695/2e50/fbf8d60610fb5f8336c9a34a68736239.mp3"
+          "https://p2.music.126.net/PgcIr7Vv7J4N_OjYxQbo0g==/109951168306417191.jpg",
+        url: "http://m701.music.126.net/20230214121207/93b6c51abf88cda3e9d2ce12fa3167a2/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/24839163330/b51a/0761/d2d2/9d93b4bb4731b2ea33fcc2a9c53da941.mp3"
       },
       isPlayer: false,
       onlyOne: false,
-      currentStatus: 0
+      currentStatus: 0,
+      currentTime: 0,
+      duration: 0
     };
   },
   actions: {
@@ -45,27 +57,35 @@ const useMusicStore = defineStore("music", {
       }
       // 详情
       getMusicDetailByIdService(id).then(({ songs }) => {
-        this.currentMusic.name = songs[0].name; // 歌曲名字
-        songs[0].ar?.map((item) => {
+        const [song] = songs;
+        console.log("歌曲信息：  ----->>>>>>    ", song);
+        this.currentMusic.name = song.name; // 歌曲名字
+        this.currentMusic.dt = song.dt; // 歌曲时长
+        song.ar?.map((item) => {
           this.currentMusic.authorName = [];
           this.currentMusic.authorName = [
             ...this.currentMusic.authorName,
             item.name
           ];
         }); // 歌手聊表.name
-        this.currentMusic.picUrl = songs[0].al.picUrl; // 歌曲封面
+        this.currentMusic.picUrl = song.al.picUrl; // 歌曲封面
+        // #ifndef H5
         (player as UniApp.BackgroundAudioManager).title =
           this.currentMusic.name;
         (player as UniApp.BackgroundAudioManager).singer =
           this.currentMusic.authorName.join("/");
         (player as UniApp.BackgroundAudioManager).coverImgUrl =
           this.currentMusic.picUrl;
+        // #endif
       });
       // 准备播放
       getMusicURLByIdService(id).then((res) => {
         this.currentMusic.url = res.data[0].url;
         loadMusic(this.currentMusic, (falg) => {
           this.isPlayer = falg;
+          setTimeout(() => {
+            this.duration = player.duration;
+          }, 500);
         });
       });
     },
