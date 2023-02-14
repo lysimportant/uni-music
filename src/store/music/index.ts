@@ -112,6 +112,7 @@ const useMusicStore = defineStore("music", {
           });
         });
         this.lrcs = lrcArr;
+        console.log(this.lrcs);
       });
     },
     toggleMusicAction() {

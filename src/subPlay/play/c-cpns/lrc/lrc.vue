@@ -2,29 +2,40 @@
   <view class="lrc" @click="$emit('show-lrc', false)">
     <view ref="lrcContentRef" class="lrc-content">
       <template v-for="(item, index) of lrcs" :key="index">
-        <view class="line">{{ item.lrc }}</view>
+        <view class="line">{{ item.lrc }} </view>
       </template>
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
-import { watch, ref } from "vue";
+import { watch, ref, onMounted, computed } from "vue";
 import { storeToRefs } from "pinia";
 
 import { useMusicStore } from "@/store";
 
-const emit = defineEmits(["show-lrc"]);
+defineEmits(["show-lrc"]);
 
 const musicStore = useMusicStore();
 const { lrcs, currentTime } = storeToRefs(musicStore);
-const lrcContentRef = ref<Element>();
-watch(
-  () => currentTime.value,
-  () => {
-    console.log("==");
-  }
-);
+// const lrcContentRef = ref<Element>();
+// onMounted(() => {
+//   lrcContentRef.value = document.querySelector(".lrc")!;
+// });
+// const currentIndex = computed(() => {
+//   lrcs.value.findIndex((item, index) => {
+//     return currentTime.value > item.time;
+//   });
+// });
+// watch(
+//   () => currentTime.value,
+//   () => {
+//     lrcContentRef.value?.scrollTo({
+//       top: currentTime.value * 10,
+//       behavior: "smooth"
+//     });
+//   }
+// );
 </script>
 <script lang="ts">
 export default {
@@ -43,13 +54,14 @@ export default {
   color: #fff;
   display: flex;
   justify-content: center;
-  transition: all 0.3s;
   align-items: center;
   /* #ifndef MP-WEIXIN */
   margin-top: 35px;
+  height: 70vh;
   /* #endif */
   /* #ifdef MP-WEIXIN */
   margin-top: 35rpx;
+  height: 65vh;
   /* #endif */
   overflow-y: auto;
   .lrc-content {

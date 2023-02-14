@@ -17,43 +17,26 @@
         </template>
         <template #right></template>
       </nav-bar>
-
       <!-- #ifdef MP-WEIXIN -->
-      <RotateImg
-        :style="{
-          height: !showLrc ? '65vh' : '0px',
-          visibility: showLrc ? 'hidden' : 'visible'
-        }"
-        @show-lrc="handleToggleImgLrc"
-      />
-      <Lrc
-        :style="{
-          height: showLrc ? '65vh' : '0px',
-          visibility: showLrc ? 'visible' : 'hidden'
-        }"
-        @show-lrc="handleToggleImgLrc"
-      />
+      <view v-show="showLrc === false">
+        <RotateImg @show-lrc="handleToggleImgLrc" />
+      </view>
+      <view v-show="showLrc">
+        <Lrc @show-lrc="handleToggleImgLrc" />
+      </view>
 
       <!-- #endif -->
 
       <!-- #ifndef MP-WEIXIN -->
-      <RotateImg
-        :style="{
-          height: !showLrc ? '70vh' : '0px',
-          visibility: showLrc ? 'hidden' : 'visible'
-        }"
-        @show-lrc="handleToggleImgLrc"
-      />
-      <Lrc
-        :style="{
-          height: showLrc ? '70vh' : '0px',
-          visibility: showLrc ? 'visible' : 'hidden'
-        }"
-        @show-lrc="handleToggleImgLrc"
-      />
+      <view v-show="showLrc === false">
+        <RotateImg @show-lrc="handleToggleImgLrc" />
+      </view>
+
+      <view v-show="showLrc">
+        <Lrc @show-lrc="handleToggleImgLrc" />
+      </view>
 
       <!-- #endif -->
-
       <view class="operation">
         <Interaction />
         <Slider />
@@ -81,11 +64,9 @@ import Interaction from "./c-cpns/interaction/interaction.vue";
 const musicStore = useMusicStore();
 const { currentMusic } = storeToRefs(musicStore);
 
-const showLrc = ref(true);
+const showLrc = ref(false);
 function handleToggleImgLrc(falg) {
-  console.log("first 触发了 修改值： ", showLrc.value, falg);
   showLrc.value = falg;
-  console.log("first 触发了 修改值： ", showLrc.value, falg);
 }
 </script>
 <script lang="ts">

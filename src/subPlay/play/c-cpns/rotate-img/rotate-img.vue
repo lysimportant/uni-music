@@ -29,7 +29,7 @@ import { useMusicStore } from "@/store";
 import gan from "@/static/play/gan.png";
 import pan from "@/static/play/pan.png";
 
-const emit = defineEmits(["show-lrc"]);
+defineEmits(["show-lrc"]);
 const musicStore = useMusicStore();
 const { currentMusic, isPlayer } = storeToRefs(musicStore);
 </script>
@@ -46,13 +46,13 @@ export default {
 </script>
 <style scoped lang="scss">
 .page-image {
-  transition: all 0.3s;
-
   /* #ifndef MP-WEIXIN */
   margin-top: 35px;
+  height: 70vh;
   /* #endif */
   /* #ifdef MP-WEIXIN */
   margin-top: 35rpx;
+  height: 65vh;
   /* #endif */
   position: relative;
   display: flex;
