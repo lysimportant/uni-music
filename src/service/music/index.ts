@@ -24,3 +24,7 @@ export function getCheckMusicURLByIdService(id: string) {
 export function getMusicDetailByIdService(id: string) {
   return hjRequest.get({ url: `/song/detail?ids=${id}` });
 }
+
+export function getMusicLrcService(id: string) {
+  return hjRequest.get({ url: "/lyric?id=" + id });
+}

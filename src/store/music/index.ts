@@ -1,11 +1,12 @@
 import {
   getMusicURLByIdService,
   getCheckMusicURLByIdService,
-  getMusicDetailByIdService
+  getMusicDetailByIdService,
+  getMusicLrcService
 } from "@/service/music";
 import { defineStore } from "pinia";
 import player, { loadMusic, playMusic, pauseMusic } from "@/utils/audio";
-
+type LrcType = { time: number; lrc: string; id?: number };
 interface IMusicStore {
   // 当前音乐的信息
   currentMusic: {
@@ -26,6 +27,8 @@ interface IMusicStore {
   currentTime: number;
   // 总时长
   duration: number;
+  // 歌词数组
+  lrcs: LrcType[];
 }
 
 const useMusicStore = defineStore("music", {
@@ -43,7 +46,8 @@ const useMusicStore = defineStore("music", {
       onlyOne: false,
       currentStatus: 0,
       currentTime: 0,
-      duration: 0
+      duration: 0,
+      lrcs: []
     };
   },
   actions: {
@@ -86,6 +90,28 @@ const useMusicStore = defineStore("music", {
         loadMusic(this.currentMusic, (falg) => {
           this.isPlayer = falg;
         });
+      });
+      getMusicLrcService(id).then((res) => {
+        const arr = (res.lrc.lyric as string).split("\n");
+        let lrcArr: { time: number; lrc: string }[] = [];
+        arr.forEach((item) => {
+          const regRxp = /\[(\d*?):(\d*?)\.(.*?)\]/g;
+          const str = regRxp.exec(item);
+          const m = str?.[1];
+          const s = str?.[2];
+          const ss = str?.[3];
+          const duration =
+            Number(m ?? 0) * 60 +
+            Number(s) +
+            parseFloat((Number(ss) / 100).toFixed(3));
+          const lrc = item.replaceAll(regRxp, "").trim();
+          console.log(duration, item);
+          lrcArr.push({
+            time: duration,
+            lrc
+          });
+        });
+        this.lrcs = lrcArr;
       });
     },
     toggleMusicAction() {

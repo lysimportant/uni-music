@@ -7,6 +7,12 @@ import { createPinia } from "pinia";
 import useIndexStore from "./index/index";
 import useCommunityStore from "./community";
 import useMusicStore from "./music";
+import useCommonStore from "./common";
+
+// const res = import.meta.glob("./**/*.ts", {
+//   eager: true
+// });
+
 const pinia = createPinia();
 
 // #ifdef H5
@@ -16,4 +22,5 @@ const pinia = createPinia();
 export default function (app: App) {
   app.use(pinia);
 }
-export { useMusicStore, useCommunityStore, useIndexStore };
+
+export { useMusicStore, useCommunityStore, useIndexStore, useCommonStore };

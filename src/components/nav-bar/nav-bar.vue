@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { useCommonStore } from "@/store";
 withDefaults(
   defineProps<{
     tip?: string;
@@ -37,8 +37,8 @@ withDefaults(
     contentHeight: "44px"
   }
 );
-const res = uni.getSystemInfoSync();
-const statusBarHeight = ref(res.statusBarHeight + "px");
+
+const commonStore = useCommonStore();
 </script>
 
 <style lang="scss" scoped>
@@ -46,7 +46,7 @@ const statusBarHeight = ref(res.statusBarHeight + "px");
   position: relative;
   z-index: 2;
   .placeholder {
-    height: v-bind("statusBarHeight");
+    height: v-bind("commonStore.statusBarHeight");
   }
   .content {
     display: flex;
