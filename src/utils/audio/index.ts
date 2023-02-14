@@ -53,4 +53,9 @@ export function pauseMusic(fn?: (flag: boolean) => void) {
 export function backRateMusic(rate = 1.0) {
   player.playbackRate = rate;
 }
+
+export function seekMusicDuration(time: number) {
+  player.seek(time);
+}
+
 export default player;

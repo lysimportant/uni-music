@@ -41,7 +41,7 @@
       </view>
       <view class="operation">
         <view class="interaction"
-          >{{ duration / 10 }}--------------{{ currentTime }}</view
+          >{{ duration }}--------------{{ currentTime }}</view
         >
         <view class="status">
           <text>{{ formatCurrentTime(currentTime * 1000) }}</text>
@@ -50,22 +50,12 @@
             :value="currentTime"
             :max="duration"
             @change="sliderChange"
+            @changing="slideDownChange"
             activeColor="#cfcfcf"
             backgroundColor="#949494"
             block-color="#fff"
-            block-size="20"
+            block-size="12"
           />
-          <!-- <u-slider
-            v-model="currentTime"
-            active-color="#cfcfcf"
-            inactive-color="#949494"
-            :max="duration / 10"  
-            :use-slot="true"
-          >
-            <view class="">
-              <view class="badge-button"></view>
-            </view>
-          </u-slider> -->
           <text>{{ formatMusicTotalTime }}</text>
         </view>
         <view class="controller">
@@ -101,27 +91,33 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from "vue";
+import { computed, watch, ref } from "vue";
 import { useMusicStore } from "@/store";
 import { storeToRefs } from "pinia";
 import gan from "@/static/play/gan.png";
 import pan from "@/static/play/pan.png";
 import { formatMusicTime } from "@/utils";
 import { playStatus, controllerIcons, backClick } from "./config";
-import player from "@/utils/audio";
+import player, { seekMusicDuration } from "@/utils/audio";
 const musicStore = useMusicStore();
 const { currentMusic, isPlayer, currentStatus, currentTime, duration } =
   storeToRefs(musicStore);
 
+const down = ref(false);
 // 监听音乐进度
 function sliderChange(val) {
-  console.log("first  ", val);
+  currentTime.value = val.detail.value;
+  seekMusicDuration(val.detail.value);
+  down.value = false;
+}
+function slideDownChange(val) {
+  down.value = true;
+  currentTime.value = val.detail.value;
 }
 let saveTimer: any = null;
 function timeFn() {
-  currentTime.value = player.currentTime;
+  !down.value && (currentTime.value = player.currentTime);
 }
-
 watch(
   () => isPlayer.value,
   (n) => {
@@ -137,13 +133,16 @@ watch(
     immediate: true
   }
 );
-
-watch(
-  () => currentTime.value,
-  (m) => {
-    console.log("first  m ---", m);
+player.onEnded((res) => {
+  if (currentStatus.value === 0) {
+    console.log("单曲播放");
+    seekMusicDuration(0);
+  } else if (currentStatus.value === 1) {
+    console.log("列表播放");
+  } else if (currentStatus.value === 2) {
+    console.log("随机播放");
   }
-);
+});
 // 播放当前时间的进度
 const formatCurrentTime = computed(() => formatMusicTime);
 // 歌的总时长
@@ -261,6 +260,7 @@ export default {
           border-radius: 50%;
         }
         & > text {
+          color: #fff;
           width: 15%;
           text-align: center;
         }

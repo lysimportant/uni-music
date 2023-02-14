@@ -1,11 +1,11 @@
 const playStatus = [
   {
     model: "icon-loop",
-    msg: "单曲循环"
+    msg: "单曲播放"
   },
   {
     model: "icon-circulation",
-    msg: "列表循环"
+    msg: "列表播放"
   },
   {
     model: "icon-random",

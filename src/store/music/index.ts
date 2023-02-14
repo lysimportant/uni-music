@@ -9,6 +9,7 @@ import player, { loadMusic, playMusic, pauseMusic } from "@/utils/audio";
 interface IMusicStore {
   // 当前音乐的信息
   currentMusic: {
+    id: number;
     url: string;
     authorName: string[];
     name: string;
@@ -31,6 +32,7 @@ const useMusicStore = defineStore("music", {
   state: (): IMusicStore => {
     return {
       currentMusic: {
+        id: 0,
         authorName: ["告五人"],
         dt: 232128,
         name: "带你飞",
@@ -59,6 +61,7 @@ const useMusicStore = defineStore("music", {
       getMusicDetailByIdService(id).then(({ songs }) => {
         const [song] = songs;
         console.log("歌曲信息：  ----->>>>>>    ", song);
+        this.currentMusic.id = songs.id;
         this.currentMusic.name = song.name; // 歌曲名字
         this.currentMusic.dt = song.dt; // 歌曲时长
         song.ar?.map((item) => {
