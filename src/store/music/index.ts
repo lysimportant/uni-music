@@ -33,12 +33,11 @@ const useMusicStore = defineStore("music", {
     return {
       currentMusic: {
         id: 0,
-        authorName: ["告五人"],
-        dt: 232128,
-        name: "带你飞",
-        picUrl:
-          "https://p2.music.126.net/PgcIr7Vv7J4N_OjYxQbo0g==/109951168306417191.jpg",
-        url: "http://m701.music.126.net/20230214121207/93b6c51abf88cda3e9d2ce12fa3167a2/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/24839163330/b51a/0761/d2d2/9d93b4bb4731b2ea33fcc2a9c53da941.mp3"
+        authorName: [],
+        dt: 0,
+        name: "",
+        picUrl: "",
+        url: ""
       },
       isPlayer: false,
       onlyOne: false,
@@ -86,9 +85,6 @@ const useMusicStore = defineStore("music", {
         this.currentMusic.url = res.data[0].url;
         loadMusic(this.currentMusic, (falg) => {
           this.isPlayer = falg;
-          setTimeout(() => {
-            this.duration = player.duration;
-          }, 500);
         });
       });
     },

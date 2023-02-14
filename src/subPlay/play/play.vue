@@ -45,6 +45,7 @@
         >
         <view class="status">
           <text>{{ formatCurrentTime(currentTime * 1000) }}</text>
+
           <slider
             class="slide"
             :value="currentTime"
@@ -98,7 +99,7 @@ import gan from "@/static/play/gan.png";
 import pan from "@/static/play/pan.png";
 import { formatMusicTime } from "@/utils";
 import { playStatus, controllerIcons, backClick } from "./config";
-import player, { seekMusicDuration } from "@/utils/audio";
+import player, { seekMusicDuration, playMusic } from "@/utils/audio";
 const musicStore = useMusicStore();
 const { currentMusic, isPlayer, currentStatus, currentTime, duration } =
   storeToRefs(musicStore);
@@ -106,17 +107,20 @@ const { currentMusic, isPlayer, currentStatus, currentTime, duration } =
 const down = ref(false);
 // 监听音乐进度
 function sliderChange(val) {
+  console.log("first  松开按钮");
   currentTime.value = val.detail.value;
   seekMusicDuration(val.detail.value);
   down.value = false;
 }
 function slideDownChange(val) {
+  console.log("first  按下按钮");
   down.value = true;
   currentTime.value = val.detail.value;
 }
 let saveTimer: any = null;
 function timeFn() {
   !down.value && (currentTime.value = player.currentTime);
+  duration.value !== player.duration && (duration.value = player.duration);
 }
 watch(
   () => isPlayer.value,
@@ -137,12 +141,14 @@ player.onEnded((res) => {
   if (currentStatus.value === 0) {
     console.log("单曲播放");
     seekMusicDuration(0);
+    playMusic();
   } else if (currentStatus.value === 1) {
     console.log("列表播放");
   } else if (currentStatus.value === 2) {
     console.log("随机播放");
   }
 });
+
 // 播放当前时间的进度
 const formatCurrentTime = computed(() => formatMusicTime);
 // 歌的总时长
@@ -171,6 +177,7 @@ export default {
 .play-index {
   position: relative;
   height: 100vh;
+  overflow: hidden;
   .bg {
     position: absolute;
     top: 0;
@@ -178,6 +185,8 @@ export default {
     left: -50%;
     right: 0;
     filter: blur(30px);
+    transform: scale(1.2);
+    background-color: black;
     background-size: cover;
   }
   .play-index-content {
@@ -187,7 +196,6 @@ export default {
     height: 100%;
     display: flex;
     flex-direction: column;
-
     .nav-bar {
       .content {
         text-align: center;
@@ -243,13 +251,15 @@ export default {
       }
     }
     .operation {
-      display: flex;
-      flex-direction: column;
+      position: relative;
+      height: 15%;
 
       .interaction {
         background-color: pink;
       }
       .status {
+        position: relative;
+        z-index: 2;
         margin: 10rpx 0;
         display: flex;
         align-items: center;
@@ -264,26 +274,21 @@ export default {
           width: 15%;
           text-align: center;
         }
-        & > view {
-          padding: 0 10rpx;
-          flex: 1;
-        }
         .slide {
           flex: 1;
         }
-        :deep(.u-slider) {
-          height: 1px;
-        }
-        :deep(.u-slider__gap) {
-          height: 1px !important;
-        }
       }
       .controller {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
         display: flex;
         align-items: center;
+        height: 180rpx;
         color: #ccc;
-        padding: 0 0 20px;
         padding-left: 9%;
+        z-index: 1;
         text {
           width: 15%;
           font-size: 50rpx;
