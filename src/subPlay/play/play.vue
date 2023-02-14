@@ -243,8 +243,8 @@ export default {
       }
     }
     .operation {
-      position: relative;
-      height: 15%;
+      display: flex;
+      flex-direction: column;
 
       .interaction {
         background-color: pink;
@@ -279,15 +279,10 @@ export default {
         }
       }
       .controller {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
         display: flex;
-        // justify-content: space-evenly;
         align-items: center;
-        height: 180rpx;
         color: #ccc;
+        padding: 0 0 20px;
         padding-left: 9%;
         text {
           width: 15%;
