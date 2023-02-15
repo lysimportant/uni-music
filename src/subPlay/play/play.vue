@@ -48,6 +48,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { onLaunch } from "@dcloudio/uni-app";
 import { storeToRefs } from "pinia";
 
 import { useMusicStore } from "@/store";
@@ -63,6 +64,10 @@ import Interaction from "./c-cpns/interaction/interaction.vue";
 
 const musicStore = useMusicStore();
 const { currentMusic } = storeToRefs(musicStore);
+
+onLaunch((e) => {
+  console.log(e);
+});
 
 const showLrc = ref(false);
 function handleToggleImgLrc(falg) {

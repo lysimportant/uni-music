@@ -4,13 +4,15 @@ import {
   getMusicDetailByIdService,
   getMusicLrcService
 } from "@/service/music";
+
 import { defineStore } from "pinia";
-import player, { loadMusic, playMusic, pauseMusic } from "@/utils/audio";
-type LrcType = { time: number; lrc: string; id?: number };
+import { loadMusic, playMusic, pauseMusic, formatLrc } from "@/utils";
+import player from "@/utils/audio";
+type LrcType = { time: number; lrc: string };
 interface IMusicStore {
   // 当前音乐的信息
   currentMusic: {
-    id: number;
+    id: number | string;
     url: string;
     authorName: string[];
     name: string;
@@ -29,13 +31,15 @@ interface IMusicStore {
   duration: number;
   // 歌词数组
   lrcs: LrcType[];
+  // 当前歌词高亮
+  currentIndex: number;
 }
 
 const useMusicStore = defineStore("music", {
   state: (): IMusicStore => {
     return {
       currentMusic: {
-        id: 0,
+        id: 1,
         authorName: [],
         dt: 0,
         name: "",
@@ -47,73 +51,64 @@ const useMusicStore = defineStore("music", {
       currentStatus: 0,
       currentTime: 0,
       duration: 0,
+      currentIndex: 0,
       lrcs: []
     };
   },
   actions: {
     async getMusicURLByIdAction(id: string) {
-      // 是否可以播放
-      const res = await getCheckMusicURLByIdService(id);
-      if (!res.success) {
-        return uni.showToast({
-          title: res.message,
-          duration: 2000
+      try {
+        // 是否可以播放
+        const res = await getCheckMusicURLByIdService(id);
+        if (!res.success) {
+          return uni.showToast({
+            title: res.message,
+            duration: 2000
+          });
+        }
+
+        // 详情
+        getMusicDetailByIdService(id).then(({ songs }) => {
+          console.log("运行了 pinia getMusicDetailByIdService");
+          const [song] = songs;
+          this.currentMusic.id = id;
+          this.currentMusic.name = song.name; // 歌曲名字
+          this.currentMusic.dt = song.dt; // 歌曲时长
+          song.ar?.map((item: any) => {
+            this.currentMusic.authorName = [];
+            this.currentMusic.authorName = [
+              ...this.currentMusic.authorName,
+              item.name
+            ];
+          }); // 歌手聊表.name
+          this.currentMusic.picUrl = song.al.picUrl; // 歌曲封面
+          // #ifndef H5
+          (player as UniApp.BackgroundAudioManager).title =
+            this.currentMusic.name;
+          (player as UniApp.BackgroundAudioManager).singer =
+            this.currentMusic.authorName.join("/");
+          (player as UniApp.BackgroundAudioManager).coverImgUrl =
+            this.currentMusic.picUrl;
+          // #endif
         });
-      }
-      // 详情
-      getMusicDetailByIdService(id).then(({ songs }) => {
-        const [song] = songs;
-        console.log("歌曲信息：  ----->>>>>>    ", song);
-        this.currentMusic.id = songs.id;
-        this.currentMusic.name = song.name; // 歌曲名字
-        this.currentMusic.dt = song.dt; // 歌曲时长
-        song.ar?.map((item) => {
-          this.currentMusic.authorName = [];
-          this.currentMusic.authorName = [
-            ...this.currentMusic.authorName,
-            item.name
-          ];
-        }); // 歌手聊表.name
-        this.currentMusic.picUrl = song.al.picUrl; // 歌曲封面
-        // #ifndef H5
-        (player as UniApp.BackgroundAudioManager).title =
-          this.currentMusic.name;
-        (player as UniApp.BackgroundAudioManager).singer =
-          this.currentMusic.authorName.join("/");
-        (player as UniApp.BackgroundAudioManager).coverImgUrl =
-          this.currentMusic.picUrl;
-        // #endif
-      });
-      // 准备播放
-      getMusicURLByIdService(id).then((res) => {
-        this.currentMusic.url = res.data[0].url;
-        loadMusic(this.currentMusic, (falg) => {
-          this.isPlayer = falg;
-        });
-      });
-      getMusicLrcService(id).then((res) => {
-        const arr = (res.lrc.lyric as string).split("\n");
-        let lrcArr: { time: number; lrc: string }[] = [];
-        arr.forEach((item) => {
-          const regRxp = /\[(\d*?):(\d*?)\.(.*?)\]/g;
-          const str = regRxp.exec(item);
-          const m = str?.[1];
-          const s = str?.[2];
-          const ss = str?.[3];
-          const duration =
-            Number(m ?? 0) * 60 +
-            Number(s) +
-            parseFloat((Number(ss) / 100).toFixed(3));
-          const lrc = item.replaceAll(regRxp, "").trim();
-          console.log(duration, item);
-          lrcArr.push({
-            time: duration,
-            lrc
+        // 获取歌词
+        const lrcs = await getMusicLrcService(id)
+        const lrc = formatLrc(lrcs.lrc.lyric);
+        this.lrcs = lrc;
+        console.log("运行了 pinia getMusicLrcService", lrc, this.lrcs);
+				
+        // 准备播放
+        getMusicURLByIdService(id).then((res) => {
+          console.log("运行了 pinia getMusicURLByIdService");
+          this.currentMusic.url = res.data[0].url;
+          loadMusic(this.currentMusic, (falg) => {
+            this.isPlayer = falg;
           });
         });
-        this.lrcs = lrcArr;
-        console.log(this.lrcs);
-      });
+      } catch (e) {
+        //TODO handle the exception
+        console.log("catch: ", e);
+      }
     },
     toggleMusicAction() {
       if (this.isPlayer) {

@@ -51,7 +51,7 @@ watch(
   () => isPlayer.value,
   (n) => {
     if (n) {
-      saveTimer = setInterval(timeFn, 1000);
+      saveTimer = setInterval(timeFn, 900);
     } else {
       clearInterval(saveTimer);
       saveTimer = null;

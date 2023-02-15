@@ -1,15 +1,28 @@
 <template>
   <view class="lrc" @click="$emit('show-lrc', false)">
-    <view ref="lrcContentRef" class="lrc-content">
-      <template v-for="(item, index) of lrcs" :key="index">
-        <view class="line">{{ item.lrc }} </view>
+    <scroll-view
+      :scroll-top="scrollTop"
+      scroll-y="true"
+      class="my--scroll"
+      scroll-with-animation
+      @scroll="scroll"
+    >
+      <template v-for="(item, index) in lrcs" :key="index">
+        <view
+          class="line"
+          :class="{
+            one: index === 0,
+            active: currentIndex === index
+          }"
+          >{{ item.lrc }}
+        </view>
       </template>
-    </view>
+    </scroll-view>
   </view>
 </template>
 
 <script lang="ts" setup>
-import { watch, ref, onMounted, computed } from "vue";
+import { computed } from "vue";
 import { storeToRefs } from "pinia";
 
 import { useMusicStore } from "@/store";
@@ -17,40 +30,28 @@ import { useMusicStore } from "@/store";
 defineEmits(["show-lrc"]);
 
 const musicStore = useMusicStore();
-const { lrcs, currentTime } = storeToRefs(musicStore);
-// const lrcContentRef = ref<Element>();
-// onMounted(() => {
-//   lrcContentRef.value = document.querySelector(".lrc")!;
-// });
-// const currentIndex = computed(() => {
-//   lrcs.value.findIndex((item, index) => {
-//     return currentTime.value > item.time;
-//   });
-// });
-// watch(
-//   () => currentTime.value,
-//   () => {
-//     lrcContentRef.value?.scrollTo({
-//       top: currentTime.value * 10,
-//       behavior: "smooth"
-//     });
-//   }
-// );
-</script>
-<script lang="ts">
-export default {
-  options: {
-    // 微信小程序中 options 选项
-    multipleSlots: true, //  在组件定义时的选项中启动多slot支持，默认启用
-    styleIsolation: "isolated", //  启动样式隔离。当使用页面自定义组件，希望父组件影响子组件样式时可能需要配置。具体配置选项参见：微信小程序自定义组件的样式
-    addGlobalClass: true, //  表示页面样式将影响到自定义组件，但自定义组件中指定的样式不会影响页面。这个选项等价于设置 styleIsolation: apply-shared
-    virtualHost: true //  将自定义节点设置成虚拟的，更加接近Vue组件的表现。我们不希望自定义组件的这个节点本身可以设置样式、响应 flex 布局等，而是希望自定义组件内部的第一层节点能够响应 flex 布局或者样式由自定义组件本身完全决定
+const { lrcs, currentTime, currentIndex } = storeToRefs(musicStore);
+
+function getIndex() {
+  for (let i = 0; i < lrcs.value.length - 1; i++) {
+    if (lrcs.value[i].time > currentTime.value) {
+      if (currentIndex.value === i) return;
+      currentIndex.value = i - 1;
+      return;
+    }
   }
-};
+}
+
+const scrollTop = computed(() => {
+  getIndex();
+  return currentIndex.value * 40;
+});
+
+function scroll(event) {}
 </script>
 <style scoped lang="scss">
 .lrc {
-  // flex: 1;
+  flex: 1;
   color: #fff;
   display: flex;
   justify-content: center;
@@ -63,20 +64,26 @@ export default {
   margin-top: 35rpx;
   height: 65vh;
   /* #endif */
-  overflow-y: auto;
-  .lrc-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    // flex-direction: row;
+  .my--scroll {
+    padding: 20px 30px;
     height: 100%;
-    padding-top: 100%;
+    .one {
+      padding: 50% 0 80rpx;
+    }
+    .active {
+      font-size: 35rpx;
+      background-image: linear-gradient(60deg, rgba(255, 255, 255, 0.7), #fff);
+      background-clip: text;
+      color: transparent !important;
+    }
     .line {
+      white-space: pre-wrap;
       text-align: center;
-      width: 100%;
-      height: 60rpx;
-      line-height: 60rpx;
+      // width: 100%;
+      color: #949494;
+      min-height: 80rpx;
+      // line-height: 80rpx;
+      // font-size: 50rpx;
     }
   }
 }
