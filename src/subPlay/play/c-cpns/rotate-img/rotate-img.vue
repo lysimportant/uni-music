@@ -48,11 +48,11 @@ export default {
 .page-image {
   /* #ifndef MP-WEIXIN */
   margin-top: 35px;
-  height: 70vh;
+  height: 65vh;
   /* #endif */
   /* #ifdef MP-WEIXIN */
   margin-top: 35rpx;
-  height: 65vh;
+  height: 60vh;
   /* #endif */
   position: relative;
   display: flex;

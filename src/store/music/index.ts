@@ -69,7 +69,6 @@ const useMusicStore = defineStore("music", {
 
         // 详情
         getMusicDetailByIdService(id).then(({ songs }) => {
-          console.log("运行了 pinia getMusicDetailByIdService");
           const [song] = songs;
           this.currentMusic.id = id;
           this.currentMusic.name = song.name; // 歌曲名字
@@ -92,14 +91,15 @@ const useMusicStore = defineStore("music", {
           // #endif
         });
         // 获取歌词
-        const lrcs = await getMusicLrcService(id)
-        const lrc = formatLrc(lrcs.lrc.lyric);
-        this.lrcs = lrc;
-        console.log("运行了 pinia getMusicLrcService", lrc, this.lrcs);
+       getMusicLrcService(id).then(res =>{
+					const lrc = formatLrc(res.lrc.lyric);
+					this.lrcs = lrc;
+
+				})
+   
 				
         // 准备播放
         getMusicURLByIdService(id).then((res) => {
-          console.log("运行了 pinia getMusicURLByIdService");
           this.currentMusic.url = res.data[0].url;
           loadMusic(this.currentMusic, (falg) => {
             this.isPlayer = falg;

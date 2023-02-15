@@ -1,6 +1,6 @@
 <template>
   <view class="status">
-    <text>{{ formatTimeComputed(currentTime * 1000) }}</text>
+    <text class="start">{{ formatTimeComputed(currentTime * 1000) }}</text>
     <slider
       class="slide"
       :value="currentTime"
@@ -12,7 +12,7 @@
       block-color="#fff"
       block-size="12"
     />
-    <text>{{ formatTimeComputed(currentMusic.dt) }}</text>
+    <text class="end">{{ formatTimeComputed(currentMusic.dt) }}</text>
   </view>
 </template>
 
@@ -85,21 +85,24 @@ const formatTimeComputed = computed(() => formatMusicTime);
   position: relative;
   z-index: 2;
   margin: 10rpx 0;
+  bottom: 25px;
   display: flex;
   align-items: center;
-  .badge-button {
-    width: 10px;
-    height: 10px;
-    background-color: #fff;
-    border-radius: 50%;
-  }
   & > text {
-    color: #fff;
-    width: 15%;
+    width: 12%;
+    font-weight: 200;
+    font-size: 20rpx;
     text-align: center;
+  }
+  .start {
+    color: #fff;
+  }
+  .end {
+    color: #949494;
   }
   .slide {
     flex: 1;
+    margin: 10rpx 0 !important;
   }
 }
 </style>

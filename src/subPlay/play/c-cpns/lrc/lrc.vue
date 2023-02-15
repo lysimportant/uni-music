@@ -8,13 +8,13 @@
       @scroll="scroll"
     >
       <template v-for="(item, index) in lrcs" :key="index">
-        <view
-          class="line"
-          :class="{
-            one: index === 0,
-            active: currentIndex === index
-          }"
-          >{{ item.lrc }}
+        <view class="line" :class="{ one: index === 0 }">
+          <text
+            :class="{
+              active: currentIndex === index
+            }"
+            >{{ item.lrc }}</text
+          >
         </view>
       </template>
     </scroll-view>
@@ -58,17 +58,26 @@ function scroll(event) {}
   align-items: center;
   /* #ifndef MP-WEIXIN */
   margin-top: 35px;
-  height: 70vh;
+  height: 65vh;
   /* #endif */
   /* #ifdef MP-WEIXIN */
   margin-top: 35rpx;
-  height: 65vh;
+  height: 60vh;
   /* #endif */
   .my--scroll {
     padding: 20px 30px;
     height: 100%;
+
+    ::-webkit-scrollbar {
+      width: 1px;
+      background-color: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      width: 1px;
+      background-color: transparent;
+    }
     .one {
-      padding: 50% 0 80rpx;
+      padding: 60% 0 80rpx;
     }
     .active {
       font-size: 35rpx;
@@ -77,13 +86,13 @@ function scroll(event) {}
       color: transparent !important;
     }
     .line {
-      white-space: pre-wrap;
-      text-align: center;
-      // width: 100%;
+      left: 0;
+      width: 100%;
       color: #949494;
       min-height: 80rpx;
-      // line-height: 80rpx;
-      // font-size: 50rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 }

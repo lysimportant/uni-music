@@ -1,5 +1,5 @@
 <template>
-  <view class="player-controller">
+  <view class="player-controller" v-if="currentMusic.url !== ''">
     <view
       @click="handleJumpPage"
       class="pic-url animation_rotate"
