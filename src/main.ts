@@ -1,5 +1,4 @@
 import { createSSRApp } from "vue";
-import * as Pinia from "pinia"
 import uView from "./uni_modules/vk-uview-ui";
 import registerStore from "@/store";
 import "./static/iconfont/iconfont.css";
@@ -13,7 +12,6 @@ export function createApp() {
   registerStore(app);
   app.use(uView);
   return {
-    app,
-		Pinia
+    app
   };
 }

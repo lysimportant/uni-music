@@ -17,18 +17,8 @@
         </template>
         <template #right></template>
       </nav-bar>
-      <!-- #ifdef MP-WEIXIN -->
-      <view v-show="showLrc === false">
-        <RotateImg @show-lrc="handleToggleImgLrc" />
-      </view>
-      <view v-show="showLrc">
-        <Lrc @show-lrc="handleToggleImgLrc" />
-      </view>
 
-      <!-- #endif -->
-
-      <!-- #ifndef MP-WEIXIN -->
-      <view v-show="showLrc === false">
+      <view v-show="!showLrc">
         <RotateImg @show-lrc="handleToggleImgLrc" />
       </view>
 
@@ -36,7 +26,6 @@
         <Lrc @show-lrc="handleToggleImgLrc" />
       </view>
 
-      <!-- #endif -->
       <view class="operation">
         <Interaction />
         <Slider />

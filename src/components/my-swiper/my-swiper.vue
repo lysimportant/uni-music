@@ -1,5 +1,5 @@
 <template>
-  <div class="my-swiper">
+  <view class="my-swiper">
     <u-swiper
       :height="height"
       :list="list"
@@ -8,7 +8,7 @@
       :indicator-pos="indicator"
     >
     </u-swiper>
-  </div>
+  </view>
 </template>
 
 <script setup lang="ts">
@@ -17,11 +17,13 @@ withDefaults(
     list: any[];
     indicator?: string;
     height?: string;
+    margin?: string;
   }>(),
   {
     list: [] as any,
     indicator: "bottomCenter",
-    height: "250"
+    height: "250",
+    margin: "0 0"
   }
 );
 </script>
@@ -30,6 +32,7 @@ withDefaults(
 .my-swiper {
   padding: 0 20rpx;
   overflow: hidden;
+  margin-top: v-bind(margin);
   .u-swiper-wrap {
     background-color: #fff;
     margin-top: 20rpx;

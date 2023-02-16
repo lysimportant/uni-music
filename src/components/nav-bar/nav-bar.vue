@@ -1,5 +1,5 @@
 <template>
-  <view class="nav-bar">
+  <view class="nav-bar" :class="{ top: top }">
     <!-- #ifdef MP-WEIXIN || APP-PLUS -->
     <view class="placeholder" />
     <!-- #endif -->
@@ -13,7 +13,14 @@
       <view class="center">
         <slot name="center">
           <view class="iconfont icon-sousuo my-search"></view
-          ><input class="my-input" :placeholder="tip" />
+          ><input
+            :style="{
+              background: top ? '#fff' : '',
+              border: top ? '1px solid #ccc' : '0'
+            }"
+            class="my-input"
+            :placeholder="tip"
+          />
         </slot>
       </view>
       <view class="right">
@@ -30,14 +37,15 @@ import { useCommonStore } from "@/store";
 withDefaults(
   defineProps<{
     tip?: string;
+    top?: boolean;
     contentHeight?: string;
   }>(),
   {
     tip: "等待操作",
+    top: false,
     contentHeight: "44px"
   }
 );
-
 const commonStore = useCommonStore();
 </script>
 
@@ -45,6 +53,8 @@ const commonStore = useCommonStore();
 .nav-bar {
   position: relative;
   z-index: 2;
+  transform: all 1s;
+
   .placeholder {
     height: v-bind("commonStore.statusBarHeight");
   }
