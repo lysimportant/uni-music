@@ -7,7 +7,7 @@
       }"
       class="pan animation_rotate"
     >
-      <image class="image" :src="currentMusic.picUrl" mode="heightFix" />
+      <image class="pan-image" :src="currentMusic.picUrl" mode="heightFix" />
     </view>
     <image
       :style="{
@@ -67,7 +67,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    .image {
+    .pan-image {
       border-radius: 50%;
       height: 380rpx;
     }

@@ -91,13 +91,11 @@ const useMusicStore = defineStore("music", {
           // #endif
         });
         // 获取歌词
-       getMusicLrcService(id).then(res =>{
-					const lrc = formatLrc(res.lrc.lyric);
-					this.lrcs = lrc;
+        getMusicLrcService(id).then((res) => {
+          const lrc = formatLrc(res.lrc.lyric);
+          this.lrcs = lrc;
+        });
 
-				})
-   
-				
         // 准备播放
         getMusicURLByIdService(id).then((res) => {
           this.currentMusic.url = res.data[0].url;
