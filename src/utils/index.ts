@@ -38,11 +38,9 @@ export function formatLrc(lyric: string) {
     const ss = str?.[3];
     const duration = Number(m ?? 0) * 60 + Number(s) + Number(ss) / 1000;
     const lrc = item.replace(regRxp, "").trim();
-
     if (!isNaN(duration)) {
       perObj.time = duration;
       perObj.lrc = lrc;
-      console.log(perObj, "=========");
     }
     return {
       time: isNaN(duration) ? perObj.time : duration,

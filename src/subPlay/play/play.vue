@@ -2,7 +2,9 @@
   <view class="play-index">
     <view
       class="bg"
-      :style="{ backgroundImage: `url('${currentMusic.picUrl}')` }"
+      :style="{
+        backgroundImage: `url('${currentDj.coverUrl ?? currentMusic.picUrl}')`
+      }"
     ></view>
     <view class="play-index-content">
       <nav-bar>
@@ -11,20 +13,23 @@
         </template>
         <template #center>
           <view class="content">
-            <view class="name">{{ currentMusic.name }}</view>
+            <view class="name">{{ currentDj.name ?? currentMusic.name }}</view>
             <view class="author">{{ currentMusic.authorName.join("/") }}</view>
           </view>
         </template>
         <template #right></template>
       </nav-bar>
-
-      <view v-show="!showLrc">
-        <RotateImg @show-lrc="handleToggleImgLrc" />
-      </view>
-
-      <view v-show="showLrc">
-        <Lrc @show-lrc="handleToggleImgLrc" />
-      </view>
+      <template v-if="!type">
+        <view v-show="!showLrc">
+          <RotateImg @show-lrc="handleToggleImgLrc" />
+        </view>
+        <view v-show="showLrc">
+          <Lrc @show-lrc="handleToggleImgLrc" />
+        </view>
+      </template>
+      <template v-else>
+        <Dj />
+      </template>
 
       <view class="operation">
         <Interaction />
@@ -36,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { onLaunch } from "@dcloudio/uni-app";
 import { storeToRefs } from "pinia";
 
@@ -47,12 +52,14 @@ import { backClick } from "./config";
 import RotateImg from "./c-cpns/rotate-img/rotate-img.vue";
 import Lrc from "./c-cpns/lrc/lrc.vue";
 
+import Dj from "./c-cpns/dj/dj.vue";
+
 import Slider from "./c-cpns/slider/slider.vue";
 import Controller from "./c-cpns/controller/controller.vue";
 import Interaction from "./c-cpns/interaction/interaction.vue";
 
 const musicStore = useMusicStore();
-const { currentMusic } = storeToRefs(musicStore);
+const { currentMusic, type, currentDj } = storeToRefs(musicStore);
 
 onLaunch((e) => {
   console.log(e);
@@ -62,6 +69,10 @@ const showLrc = ref(false);
 function handleToggleImgLrc(falg) {
   showLrc.value = falg;
 }
+
+const topNumber = computed(() => {
+  return type.value ? "38%" : "0";
+});
 </script>
 <script lang="ts">
 export default {
@@ -124,7 +135,7 @@ export default {
     }
     .operation {
       position: absolute;
-      bottom: 0;
+      bottom: v-bind("topNumber");
       left: 0;
       right: 0;
       z-index: 1;

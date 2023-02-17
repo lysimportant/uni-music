@@ -5,11 +5,15 @@
       class="pic-url animation_rotate"
       :style="{ 'animation-play-state': isPlayer ? 'running' : 'paused' }"
     >
-      <image class="image" :src="currentMusic.picUrl" mode="heightFix" />
+      <image
+        class="image"
+        :src="currentDj.coverUrl ?? currentMusic.picUrl"
+        mode="heightFix"
+      />
     </view>
     <view class="info" @click="handleJumpPage">
       <text class="song-name">
-        {{ currentMusic.name }}
+        {{ currentDj.name ?? currentMusic.name }}
       </text>
       <text class="author-name">
         - {{ currentMusic.authorName.join("/") }}
@@ -30,19 +34,11 @@ import { useMusicStore } from "@/store";
 import { storeToRefs } from "pinia";
 
 const musicStore = useMusicStore();
-const { currentMusic, isPlayer } = storeToRefs(musicStore);
+const { currentMusic, isPlayer, currentDj } = storeToRefs(musicStore);
 
 function handleJumpPage() {
-  // uni.switchTab()
-
   uni.navigateTo({
-    url: "/subPlay/play/play",
-    success(info) {
-      console.log("跳转成功！", info);
-    },
-    fail(err) {
-      console.log("跳转失败！", err);
-    }
+    url: "/subPlay/play/play"
   });
 }
 function operation() {

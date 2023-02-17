@@ -15,8 +15,8 @@
           <view class="iconfont icon-sousuo my-search"></view
           ><input
             :style="{
-              background: !top ? '' : '#fff',
-              border: !top ? '0' : '1px solid #ccc'
+              background: top ? '#fff' : '',
+              border: !top ? '1px solid #ccc' : '0'
             }"
             class="my-input"
             :placeholder="tip"
@@ -68,12 +68,11 @@ const commonStore = useCommonStore();
       text-align: center;
       width: 12%;
       .iconfont {
-        font-size: 55rpx;
+        font-size: 45rpx;
       }
     }
     .center {
       position: relative;
-      // left: 0;
       flex: 1;
       display: flex;
       justify-content: center;

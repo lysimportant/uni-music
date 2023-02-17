@@ -1,7 +1,7 @@
 import type { Method } from "./type";
 interface RequestConfig {
-  baseURL: string;
-  timeout: number;
+  baseURL?: string;
+  timeout?: number;
   interceptor?: {
     requert?: (config: any) => void;
     response?: (config: any) => void;
@@ -9,8 +9,8 @@ interface RequestConfig {
   };
 }
 class HJRequest {
-  private baseURL: string;
-  private timeout: number;
+  private baseURL?: string;
+  private timeout?: number;
   constructor(data: RequestConfig) {
     this.baseURL = data.baseURL;
     this.timeout = data.timeout;
@@ -24,7 +24,7 @@ class HJRequest {
     return new Promise<T>((resolve, reject) => {
       uni.request({
         method,
-        url: this.baseURL + config.url,
+        url: this.baseURL ? this.baseURL + config.url : config.url,
         data: config.data,
         timeout: this.timeout,
         success: (res: any) => {

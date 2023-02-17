@@ -1,21 +1,16 @@
 <template>
-  <view class="song-peice-item" @click="$emit('click', item.id)">
+  <view class="dj-peice-item" @click="$emit('click', item)">
     <template v-if="showPic">
-      <image class="image" :src="item.picUrl" mode="heightFix" />
+      <image class="image" :src="item.blurCoverUrl" mode="heightFix" />
     </template>
     <view class="content">
       <view class="name">{{ item.name }}</view>
-      <view class="info">
-        <template v-for="(ar, ind) in item.song.artists" :key="ind">
-          {{ handler_(ar.name, ind, item.song.artists.length - 1) }}
-        </template>
-      </view>
+      <view class="info"> {{ item.dj.nickname }}</view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { handler_ } from "@/utils";
 defineEmits(["click"]);
 withDefaults(
   defineProps<{
@@ -30,12 +25,12 @@ withDefaults(
 </script>
 <script lang="ts">
 export default {
-  name: "song-peice-item"
+  name: "dj-peice-item"
 };
 </script>
 
 <style lang="scss" scoped>
-.song-peice-item {
+.dj-peice-item {
   display: flex;
   margin: 10rpx 0;
   .image {

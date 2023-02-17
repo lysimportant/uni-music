@@ -12,7 +12,7 @@
       block-color="#fff"
       block-size="12"
     />
-    <text class="end">{{ formatTimeComputed(currentMusic.dt) }}</text>
+    <text class="end">{{ formatTimeComputed(duration * 1000) }}</text>
   </view>
 </template>
 
@@ -85,7 +85,7 @@ const formatTimeComputed = computed(() => formatMusicTime);
   position: relative;
   z-index: 2;
   margin: 10rpx 0;
-  bottom: 25px;
+  // bottom: 10px;
   display: flex;
   align-items: center;
   & > text {

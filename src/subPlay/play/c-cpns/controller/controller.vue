@@ -51,16 +51,17 @@ function showModel() {
 
 <style scoped lang="scss">
 .controller {
-  position: absolute;
+  position: relative;
   bottom: 0;
   left: 0;
   right: 0;
   display: flex;
   align-items: center;
-  height: 180rpx;
+  // height: 120rpx;
   color: #ccc;
   padding-left: 9%;
   z-index: 1;
+  padding-bottom: 25px;
   text {
     width: 15%;
     font-size: 50rpx;

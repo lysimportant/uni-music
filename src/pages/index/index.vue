@@ -12,25 +12,30 @@
       <IndexDiscover :discover-icons="discoverIcons" />
       <IndexRecommendSongs :songs="songs" />
       <IndexNewsongs :new-songs="newSongs" />
+      <IndexDj :dj-list="djList"></IndexDj>
     </view>
     <player-controller></player-controller>
   </view>
 </template>
 
 <script setup lang="ts">
+import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { onPageScroll } from "@dcloudio/uni-app";
 
 import { useIndexStore, useCommonStore } from "@/store";
+
 import IndexDiscover from "./c-cpns/index-discover.vue";
 import IndexRecommendSongs from "./c-cpns/index-recommend-songs.vue";
 import IndexNewsongs from "./c-cpns/index-newsongs.vue";
-import { computed, ref } from "vue";
+import IndexDj from "./c-cpns/index-dj.vue";
+
 // 获取数据
 const indexStore = useIndexStore();
 const commonStore = useCommonStore();
 indexStore.getIndexDataAction();
-const { banners, discoverIcons, songs, newSongs } = storeToRefs(indexStore);
+const { banners, discoverIcons, songs, newSongs, djList } =
+  storeToRefs(indexStore);
 const isTop = ref(true);
 onPageScroll(({ scrollTop }) => {
   if (scrollTop === 0) {
@@ -38,7 +43,6 @@ onPageScroll(({ scrollTop }) => {
   } else {
     isTop.value && (isTop.value = false);
   }
-  console.log(isTop.value);
 });
 
 const barHeight = computed(() => {
@@ -46,7 +50,6 @@ const barHeight = computed(() => {
   if (commonStore.statusBarHeight.length > 3) {
     height = Number(commonStore.statusBarHeight.slice(0, 2));
   }
-  console.log(height, isTop.value);
   return height + 44 + "px";
 });
 </script>

@@ -13,8 +13,14 @@ defineProps<{
 }>();
 const musicStore = useMusicStore();
 
-function songClick(params: any) {
-  musicStore.getMusicURLByIdAction(params.id);
+function songClick(id: number) {
+  if (musicStore.currentMusic.id == id) {
+    uni.navigateTo({
+      url: "/subPlay/play/play"
+    });
+    return;
+  }
+  musicStore.getMusicURLByIdAction(String(id));
 }
 </script>
 
