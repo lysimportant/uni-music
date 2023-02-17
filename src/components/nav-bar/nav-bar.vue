@@ -15,8 +15,8 @@
           <view class="iconfont icon-sousuo my-search"></view
           ><input
             :style="{
-              background: top ? '#fff' : '',
-              border: top ? '1px solid #ccc' : '0'
+              background: !top ? '' : '#fff',
+              border: !top ? '0' : '1px solid #ccc'
             }"
             class="my-input"
             :placeholder="tip"
@@ -53,7 +53,6 @@ const commonStore = useCommonStore();
 .nav-bar {
   position: relative;
   z-index: 2;
-  transform: all 1s;
 
   .placeholder {
     height: v-bind("commonStore.statusBarHeight");

@@ -1,11 +1,11 @@
 <template>
   <view class="content">
-    <view :class="{ bg: !isTop }"></view>
-    <nav-bar :top="isTop" :tip="'推荐的数据'"> </nav-bar>
+    <view :class="{ bg: isTop }"></view>
+    <nav-bar :top="!isTop" :tip="'推荐的数据'"> </nav-bar>
     <my-swiper
       height="350px"
       indicator="bottomLeft"
-      :margin="isTop ? barHeight : 0"
+      :margin="isTop ? '0' : barHeight"
       :list="banners"
     ></my-swiper>
     <view class="main">
@@ -33,15 +33,20 @@ indexStore.getIndexDataAction();
 const { banners, discoverIcons, songs, newSongs } = storeToRefs(indexStore);
 const isTop = ref(true);
 onPageScroll(({ scrollTop }) => {
-  if (scrollTop !== 0) {
+  if (scrollTop === 0) {
     isTop.value = true;
   } else {
     isTop.value && (isTop.value = false);
   }
+  console.log(isTop.value);
 });
 
 const barHeight = computed(() => {
-  const height = Number(commonStore.statusBarHeight.slice(0, 2));
+  let height = 0;
+  if (commonStore.statusBarHeight.length > 3) {
+    height = Number(commonStore.statusBarHeight.slice(0, 2));
+  }
+  console.log(height, isTop.value);
   return height + 44 + "px";
 });
 </script>
