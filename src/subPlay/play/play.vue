@@ -36,12 +36,23 @@
         <Slider />
         <Controller />
       </view>
+
+      <template v-if="type">
+        <view class="dj-tba">
+          <l-tabs
+            :list="list"
+            default-color="#949494"
+            active-color="#fff"
+            block-color="#fff"
+          ></l-tabs>
+        </view>
+      </template>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { onLaunch } from "@dcloudio/uni-app";
 import { storeToRefs } from "pinia";
 
@@ -60,7 +71,17 @@ import Interaction from "./c-cpns/interaction/interaction.vue";
 
 const musicStore = useMusicStore();
 const { currentMusic, type, currentDj } = storeToRefs(musicStore);
-
+const list = [
+  {
+    name: "详情"
+  },
+  {
+    name: "推荐"
+  }
+];
+function change(event) {
+  console.log("first: ", event);
+}
 onLaunch((e) => {
   console.log(e);
 });
@@ -124,7 +145,11 @@ export default {
         }
       }
     }
-
+    .dj-tba {
+      position: relative;
+      top: 12%;
+      // width: 200px;
+    }
     lrc,
     rotate-img {
       flex: 1;
