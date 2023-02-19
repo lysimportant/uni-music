@@ -1,6 +1,10 @@
 <template></template>
 <style lang="scss">
 @import "./uni_modules/vk-uview-ui/index.scss";
+
+:root {
+  --default-color: #949494;
+}
 .top {
   position: fixed !important;
   top: 0;

@@ -28,7 +28,9 @@
         </view>
       </template>
       <template v-else>
-        <Dj />
+        <view class="dj">
+          <image class="dj-image" :src="currentDj.coverUrl" mode="widthFix" />
+        </view>
       </template>
 
       <view class="operation">
@@ -38,21 +40,14 @@
       </view>
 
       <template v-if="type">
-        <view class="dj-tba">
-          <l-tabs
-            :list="list"
-            default-color="#949494"
-            active-color="#fff"
-            block-color="#fff"
-          ></l-tabs>
-        </view>
+        <Dj />
       </template>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { onLaunch } from "@dcloudio/uni-app";
 import { storeToRefs } from "pinia";
 
@@ -71,14 +66,7 @@ import Interaction from "./c-cpns/interaction/interaction.vue";
 
 const musicStore = useMusicStore();
 const { currentMusic, type, currentDj } = storeToRefs(musicStore);
-const list = [
-  {
-    name: "详情"
-  },
-  {
-    name: "推荐"
-  }
-];
+
 function change(event) {
   console.log("first: ", event);
 }
@@ -145,11 +133,7 @@ export default {
         }
       }
     }
-    .dj-tba {
-      position: relative;
-      top: 12%;
-      // width: 200px;
-    }
+
     lrc,
     rotate-img {
       flex: 1;
@@ -157,6 +141,14 @@ export default {
 
     lrc {
       overflow-y: auto;
+    }
+
+    .dj {
+      margin: 150rpx auto;
+      .dj-image {
+        width: 400rpx;
+        border-radius: 20rpx;
+      }
     }
     .operation {
       position: absolute;

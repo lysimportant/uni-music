@@ -16,7 +16,10 @@
         {{ currentDj.name ?? currentMusic.name }}
       </text>
       <text class="author-name">
-        - {{ currentMusic.authorName.join("/") }}
+        -
+        {{
+          currentDj.authorName.join("/") ?? currentMusic.authorName.join("/")
+        }}
       </text>
     </view>
     <view class="controller">

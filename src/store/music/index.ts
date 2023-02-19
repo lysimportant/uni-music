@@ -4,7 +4,11 @@ import {
   getMusicDetailByIdService,
   getMusicLrcService
 } from "@/service/music";
-import { getDjDetailService } from "@/service/dj";
+import {
+  getDjPlayDetailService,
+  getDjDetailService,
+  getReommendDjService
+} from "@/service/dj";
 
 import { defineStore } from "pinia";
 import { loadMusic, playMusic, pauseMusic, formatLrc } from "@/utils";
@@ -18,10 +22,28 @@ interface IMusicStore {
     authorName: string[];
     name: string;
     picUrl: string;
-    dt: number;
   };
   // 当前电台
-  currentDj: any;
+  currentDj: {
+    name: string;
+    pageID: number;
+    musicID: number;
+    authorName: string[];
+    categoryName: string;
+    createTime: number;
+    coverUrl: string;
+    desc: string;
+    listenerCount: number;
+    radio: {
+      id: number;
+      name: string;
+      subCount: number;
+      updatedTime: number;
+      coverUrl: string;
+      shareCount: number;
+    };
+    recommend: any[];
+  };
   // 是否在播放
   isPlayer: boolean;
   // 第一次播放
@@ -46,12 +68,30 @@ const useMusicStore = defineStore("music", {
       currentMusic: {
         id: 1,
         authorName: [],
-        dt: 0,
         name: "",
         picUrl: "",
         url: ""
       },
-      currentDj: {},
+      currentDj: {
+        name: "",
+        pageID: 0,
+        musicID: 0,
+        authorName: [],
+        coverUrl: "",
+        categoryName: "",
+        createTime: 0,
+        desc: "",
+        listenerCount: 0,
+        radio: {
+          id: 0,
+          name: "",
+          subCount: 0,
+          updatedTime: 0,
+          coverUrl: "",
+          shareCount: 0
+        },
+        recommend: []
+      },
       isPlayer: false,
       onlyOne: false,
       currentStatus: 0,
@@ -106,9 +146,30 @@ const useMusicStore = defineStore("music", {
           });
         } else {
           this.type = 1;
-          getDjDetailService(djId).then((res) => {
-            this.currentDj = res.program;
-            this.duration = res.program.duration;
+          const res = await getDjPlayDetailService(djId);
+          this.currentDj.name = res.program.name; // 播放播客的名字
+          this.currentDj.coverUrl = res.program.coverUrl; // 图片
+          this.currentDj.pageID = res.program.id; // 当前播放播客的id
+          this.currentDj.musicID = res.program.mainTrackId; // 获取音频的id
+          this.currentDj.authorName = [res.program.mainSong.artists[0].name]; // 播客的作者
+          this.currentDj.desc = res.program.description;
+          this.currentDj.categoryName = res.program.categoryName;
+          this.currentDj.createTime = res.program.createTime;
+          this.currentDj.listenerCount = res.program.listenerCount;
+          this.currentDj.radio.id = res.program.radio.id;
+          this.duration = res.program.duration; // 时长
+          getDjDetailService(this.currentDj.radio.id).then(({ data }) => {
+            console.log(data);
+            this.currentDj.radio.name = data.name;
+            this.currentDj.radio.coverUrl = data.picUrl;
+            this.currentDj.radio.updatedTime = data.lastProgramCreateTime;
+            this.currentDj.radio.subCount = data.subCount;
+            this.currentDj.radio.shareCount = data.shareCount;
+            console.log(this.currentDj.radio);
+          });
+          getReommendDjService().then((res) => {
+            console.log(res.djRadios);
+            this.currentDj.recommend = res.djRadios;
           });
         }
 
