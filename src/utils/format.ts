@@ -59,7 +59,12 @@ export function formatLrc(lyric: string) {
  * @returns 歌曲的格式化时间
  */
 export function formatMusicTime(dt: number) {
-  const minute = String(Math.floor(dt / 1000 / 60)).padStart(2, "0");
-  const secound = String(Math.floor((dt / 1000) % 60)).padStart(2, "0");
-  return minute + ":" + secound;
+  const minute = Math.floor(dt / 60)
+    .toString()
+    .padStart(2, "0");
+  const secound = Math.floor(dt % 60)
+    .toString()
+    .padStart(2, "0");
+
+  return `${minute}:${secound}`;
 }

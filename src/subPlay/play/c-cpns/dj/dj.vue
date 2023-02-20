@@ -6,6 +6,7 @@
       active-color="#fff"
       block-color="#fff"
     >
+      {{ currentDj.radio }}
       <template #detail>
         <view class="detail">
           <flex-cpn height="60px">
@@ -44,6 +45,7 @@
           </view>
         </view>
       </template>
+
       <template #reommend>
         <view class="recommend">
           <scroll-view scroll-y class="scroll-Y">
@@ -84,6 +86,7 @@ import { computed } from "vue";
 const musicStore = useMusicStore();
 const { currentDj } = storeToRefs(musicStore);
 const countCmp = computed(() => formatCount);
+
 const list = [
   {
     name: "详情",
@@ -99,8 +102,15 @@ const list = [
 <style scoped lang="scss">
 .dj-tba {
   position: relative;
-  padding: 10px;
-  top: 12%;
+  padding: 0 10px;
+  /* #ifndef MP */
+  top: 11%;
+  /* #endif */
+  /* #ifdef MP */
+  top: 25%;
+  /* #endif */
+  height: 250px;
+
   .detail {
     // text-align: center;
     padding: 12px;
@@ -166,7 +176,6 @@ const list = [
   }
   .recommend {
     width: 100%;
-    height: 250px;
     .scroll-Y {
       height: 100%;
     }

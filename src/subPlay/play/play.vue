@@ -67,7 +67,7 @@ import Interaction from "./c-cpns/interaction/interaction.vue";
 const musicStore = useMusicStore();
 const { currentMusic, type, currentDj } = storeToRefs(musicStore);
 
-function change(event) {
+function change(event: any) {
   console.log("first: ", event);
 }
 onLaunch((e) => {
@@ -75,7 +75,7 @@ onLaunch((e) => {
 });
 
 const showLrc = ref(false);
-function handleToggleImgLrc(falg) {
+function handleToggleImgLrc(falg: boolean) {
   showLrc.value = falg;
 }
 

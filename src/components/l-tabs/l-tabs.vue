@@ -6,8 +6,8 @@
       <template v-for="(item, index) in list" :key="item">
         <view
           class="l-tabs__item"
-          ref="tabItemRef"
-          @click="tabsClick(index, ($event as any).instance, tabItemRef)"
+          @click="tabsClick(index, list)"
+          :style="{ width: itemWidth }"
           :class="{ 'l-tabs__item-active': currentTab === index }"
           >{{ item.name }}</view
         >
@@ -29,6 +29,7 @@ import { ref, onMounted, computed } from "vue";
 const props = withDefaults(
   defineProps<{
     list: { name: string; slotName: string }[];
+    itemWidth?: string;
     defaultColor?: string;
     activeColor?: string;
     blockColor?: string;
@@ -38,6 +39,7 @@ const props = withDefaults(
   }>(),
   {
     defaultColor: "#949494",
+    itemWidth: "50px",
     activeColor: "#ffffff",
     blockColor: "#ffffff",
     height: "44px",
@@ -47,15 +49,14 @@ const props = withDefaults(
 );
 
 const currentTab = ref(0);
-const tabItemRef = ref([]);
 const tabBlockLeft = ref();
-function tabsClick(index: number, el, arr) {
+function tabsClick(index: number, arr: any[]) {
   currentTab.value = index;
-  tabBlockLeft.value =
-    index * el.$el.clientWidth + el.$el.clientWidth / arr.length + "px";
+  const width = Number(props.itemWidth.replace("px", ""));
+  tabBlockLeft.value = index * width + width / arr.length + "px";
 }
 onMounted(() => {
-  tabsClick(currentTab.value, tabItemRef.value[0], props.list);
+  tabsClick(currentTab.value, props.list);
 });
 const blockOffsetCmp = ref(`translateX(${props.blockOffset})`);
 </script>
@@ -71,12 +72,13 @@ const blockOffsetCmp = ref(`translateX(${props.blockOffset})`);
     line-height: v-bind("$props.height");
     // font-size: 16px;
     color: v-bind("$props.defaultColor");
+    text-align: center;
     &__item-active {
       color: v-bind("$props.activeColor");
     }
-    &__item {
-      padding: 0 20rpx;
-    }
+    // &__item {
+    //   padding: 0 20rpx;
+    // }
     .l-tabs-block__item {
       position: absolute;
       transition: all 0.3s;

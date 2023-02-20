@@ -67,7 +67,7 @@ const scrollTop = computed(() => {
   return currentIndex.value * 40;
 });
 
-function scroll(event) {
+function scroll(event: any) {
   for (let i = 0; i < lrcs.value.length - 1; i++) {
     if (lrcs.value[i].time > currentTime.value) {
       const index = Math.floor(event.detail.scrollTop / 40);

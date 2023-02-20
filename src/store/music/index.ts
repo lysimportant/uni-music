@@ -157,7 +157,16 @@ const useMusicStore = defineStore("music", {
           this.currentDj.createTime = res.program.createTime;
           this.currentDj.listenerCount = res.program.listenerCount;
           this.currentDj.radio.id = res.program.radio.id;
+
           this.duration = res.program.duration; // 时长
+
+          // #ifndef H5
+          (player as UniApp.BackgroundAudioManager).title = this.currentDj.name;
+          (player as UniApp.BackgroundAudioManager).singer =
+            this.currentDj.authorName.join("/");
+          (player as UniApp.BackgroundAudioManager).coverImgUrl =
+            this.currentDj.coverUrl;
+          // #endif
           getDjDetailService(this.currentDj.radio.id).then(({ data }) => {
             console.log(data);
             this.currentDj.radio.name = data.name;
@@ -172,7 +181,7 @@ const useMusicStore = defineStore("music", {
             this.currentDj.recommend = res.djRadios;
           });
         }
-
+        this.currentTime = 0;
         // 准备播放
         getMusicURLByIdService(id).then((res) => {
           this.currentMusic.url = res.data[0].url;

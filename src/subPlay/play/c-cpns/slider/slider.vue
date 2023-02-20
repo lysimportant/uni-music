@@ -1,6 +1,6 @@
 <template>
   <view class="status">
-    <text class="start">{{ formatTimeComputed(currentTime * 1000) }}</text>
+    <text class="start">{{ formatTimeComputed(currentTime) }}</text>
     <slider
       class="slide"
       :value="currentTime"
@@ -12,7 +12,7 @@
       block-color="#fff"
       block-size="12"
     />
-    <text class="end">{{ formatTimeComputed(duration * 1000) }}</text>
+    <text class="end">{{ formatTimeComputed(duration) }}</text>
   </view>
 </template>
 
@@ -26,19 +26,20 @@ import player, { seekMusicDuration, playMusic } from "@/utils/audio";
 import { formatMusicTime } from "@/utils";
 
 const musicStore = useMusicStore();
-const { currentMusic, isPlayer, currentStatus, currentTime, duration } =
+const { isPlayer, currentStatus, currentTime, duration } =
   storeToRefs(musicStore);
 
 // 监听音乐进度
 const down = ref(false); // 是否按下
 // 放开进度条
-function sliderChange(val) {
+function sliderChange(val: any) {
+  console.log(val);
   currentTime.value = val.detail.value;
   seekMusicDuration(val.detail.value);
   down.value = false;
 }
 // 按下进度条 ing
-function slideDownChange(val) {
+function slideDownChange(val: any) {
   down.value = true;
   currentTime.value = val.detail.value;
 }
