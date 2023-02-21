@@ -55,7 +55,7 @@ const djDetail = computed(() => ({
   picUrl: detail.value.picUrl,
   name: detail.value.name,
   nickname: detail.value.dj?.nickname,
-  category: detail.value.category,
+  categorys: [detail.value.category],
   desc: detail.value.desc
 }));
 

@@ -55,7 +55,14 @@
       "root": "subPlayDetail",
       "pages": [
         {
-          "path": "detail/detail",
+          "path": "dj-detail/dj-detail",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "song-detail/song-detail",
           "style": {
             "enablePullDownRefresh": false,
             "navigationStyle": "custom"

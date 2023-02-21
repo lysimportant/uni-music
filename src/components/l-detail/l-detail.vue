@@ -27,7 +27,9 @@
               <text>{{ detail?.nickname }}</text>
             </view>
             <view class="header-info-tags tag">
-              <text>{{ detail?.category }}</text>
+              <template v-for="item of detail.categorys" :key="item">
+                <text>{{ item }}</text>
+              </template>
             </view>
           </view>
         </view>
@@ -56,6 +58,17 @@ function backClick() {
 .detail {
   color: #fff;
 
+  .bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -50%;
+    right: 0;
+    filter: blur(30px);
+    transform: scale(1.2);
+    background-color: black;
+    background-size: cover;
+  }
   .arrow {
     font-size: 20px;
   }
@@ -99,6 +112,7 @@ function backClick() {
           &-tags {
             text {
               padding: 3rpx 8rpx;
+              margin-right: 10rpx;
               border-radius: 10rpx;
               background-color: rgba(255, 255, 255, 0.3);
             }
@@ -111,7 +125,9 @@ function backClick() {
         margin-top: 15rpx;
       }
       .desc {
-        color: var(--default-color);
+        color: #fff;
+        max-height: 50px;
+        overflow-y: auto;
       }
     }
     &__body {

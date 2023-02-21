@@ -95,9 +95,8 @@ const musicStore = useMusicStore();
 const { currentDj } = storeToRefs(musicStore);
 const countCmp = computed(() => formatCount);
 function handleJumpClick() {
-  console.log("first", currentDj.value);
   uni.navigateTo({
-    url: `/subPlayDetail/detail/detail?pid=${currentDj.value.pageID}&cid=${currentDj.value.radio.id}`
+    url: `/subPlayDetail/dj-detail/dj-detail?cid=${currentDj.value.radio.id}`
   });
 }
 const list = [

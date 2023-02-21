@@ -94,6 +94,17 @@ export default {
   height: 100vh;
   overflow: hidden;
 
+  .bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -50%;
+    right: 0;
+    filter: blur(30px);
+    transform: scale(1.2);
+    background-color: black;
+    background-size: cover;
+  }
   .play-index-content {
     position: relative;
     z-index: 2;

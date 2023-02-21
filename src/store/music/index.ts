@@ -2,7 +2,8 @@ import {
   getMusicURLByIdService,
   getCheckMusicURLByIdService,
   getMusicDetailByIdService,
-  getMusicLrcService
+  getMusicLrcService,
+  getMusicSongDetailService
 } from "@/service/music";
 import {
   getDjPlayDetailService,
@@ -13,56 +14,7 @@ import {
 import { defineStore } from "pinia";
 import { loadMusic, playMusic, pauseMusic, formatLrc } from "@/utils";
 import player from "@/utils/audio";
-type LrcType = { time: number; lrc: string };
-interface IMusicStore {
-  // 当前音乐的信息
-  currentMusic: {
-    id: number | string;
-    url: string;
-    authorName: string[];
-    name: string;
-    picUrl: string;
-  };
-  // 当前电台
-  currentDj: {
-    name: string;
-    coverUrl: string;
-    authorName: string[];
-
-    pageID: number;
-    musicID: number;
-    categoryName: string;
-    createTime: number;
-
-    desc: string;
-    listenerCount: number;
-    radio: {
-      id: number;
-      name: string;
-      subCount: number;
-      updatedTime: number;
-      coverUrl: string;
-      shareCount: number;
-    };
-    recommend: any[];
-  };
-  // 是否在播放
-  isPlayer: boolean;
-  // 第一次播放
-  onlyOne: boolean;
-  // 播放模式： 0 单曲 1 列表 2 随机
-  currentStatus: number;
-  // 当前时间
-  currentTime: number;
-  // 总时长
-  duration: number;
-  // 歌词数组
-  lrcs: LrcType[];
-  // 当前歌词高亮
-  currentIndex: number;
-  // 音乐|播客 0|1
-  type: number;
-}
+import type IMusicStore from "./type";
 
 const useMusicStore = defineStore("music", {
   state: (): IMusicStore => ({
@@ -100,7 +52,9 @@ const useMusicStore = defineStore("music", {
     duration: 0,
     currentIndex: 0,
     lrcs: [],
-    type: 0
+    type: 0,
+    songDetail: {},
+    playList: []
   }),
   actions: {
     async getMusicURLByIdAction(id: string, type?: number, djId?: number) {
@@ -117,7 +71,7 @@ const useMusicStore = defineStore("music", {
         if (!type) {
           this.type = 0;
           // 详情
-          getMusicDetailByIdService(id).then((res) => {
+          getMusicDetailByIdService([id]).then((res) => {
             const [song] = res.songs;
             this.duration = song.dt;
             this.currentMusic.id = id;
@@ -202,6 +156,24 @@ const useMusicStore = defineStore("music", {
         playMusic();
         this.isPlayer = true;
       }
+    },
+    async getSongDetailActions(id: number) {
+      const res = await getMusicSongDetailService(id);
+      console.log("first: ", res);
+      this.songDetail = res.playlist;
+
+      const mids = res.playlist.trackIds.map((item: any) => item.id);
+      getMusicDetailByIdService(mids).then((res) => {
+        this.songDetail.AllSongs = res.songs.map((item: any) => ({
+          name: item.name, // 音乐的名字
+          id: item.id,
+          duration: item.dt,
+          authorName: item.ar.map((item: any) => item.name),
+          coverUrl: item.al.picUrl,
+          fee: item.fee
+        }));
+        console.log("first 请求musicdetail: ", this.songDetail.AllSongs);
+      });
     }
   }
 });

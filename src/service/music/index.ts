@@ -21,10 +21,19 @@ export function getCheckMusicURLByIdService(id: string) {
  * @param id 音乐ID
  * @returns 音乐的详情
  */
-export function getMusicDetailByIdService(id: string) {
-  return hjRequest.get({ url: `/song/detail?ids=${id}` });
+export function getMusicDetailByIdService(id: string[]) {
+  return hjRequest.get({ url: `/song/detail?ids=${id.join(",")}` });
 }
 
 export function getMusicLrcService(id: string) {
   return hjRequest.get({ url: "/lyric?id=" + id });
+}
+
+/**
+ * 获取歌单数据
+ * @param id 歌单的ID
+ * @returns 返回歌单的详情
+ */
+export function getMusicSongDetailService(id: number) {
+  return hjRequest.get({ url: `/playlist/detail?id=${id}` });
 }

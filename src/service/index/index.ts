@@ -19,7 +19,7 @@ export function getIndexDiscoverIconsService() {
  * @returns 返回首页推荐歌单
  */
 export function getIndexRecommendService() {
-  return hjRequest.get({ url: "/personalized?limit=5" });
+  return hjRequest.get({ url: "/personalized?limit=15" });
 }
 
 /**

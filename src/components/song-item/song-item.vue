@@ -1,14 +1,20 @@
 <template>
-  <view class="song-item">
+  <view class="song-item" @click="handleItemClick">
     <view class="bg"></view>
     <image class="image" :src="item.picUrl" mode="heightFix" />
     <text class="text">{{ item?.name }}</text>
   </view>
 </template>
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   item: any;
 }>();
+
+function handleItemClick() {
+  uni.navigateTo({
+    url: `/subPlayDetail/song-detail/song-detail?id=${props.item.id}`
+  });
+}
 </script>
 <script lang="ts">
 export default {
@@ -31,7 +37,7 @@ export default {
     height: 20px;
     width: 90%;
     z-index: 0;
-    background-color: rgb(235, 237, 235);
+    background-color: rgba(204, 204, 204, 0.8);
     opacity: 0.65;
     border-radius: 10px;
   }
