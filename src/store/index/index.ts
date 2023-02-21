@@ -16,15 +16,13 @@ interface IIndexState {
 }
 
 const indexStore = defineStore("index", {
-  state: (): IIndexState => {
-    return {
-      banners: [],
-      discoverIcons: [],
-      songs: [],
-      newSongs: [],
-      djList: []
-    };
-  },
+  state: (): IIndexState => ({
+    banners: [],
+    discoverIcons: [],
+    songs: [],
+    newSongs: [],
+    djList: []
+  }),
   actions: {
     getIndexDataAction(): void {
       // banner
@@ -35,7 +33,7 @@ const indexStore = defineStore("index", {
       });
       // icons
       getIndexDiscoverIconsService().then((res) => {
-        this.discoverIcons = res.data.map((item, index) => ({
+        this.discoverIcons = res.data.map((item: any, index: number) => ({
           ...item,
           ...urls[index]
         }));
@@ -50,7 +48,7 @@ const indexStore = defineStore("index", {
       });
       // djs
       getIndexHotDjService().then((res) => {
-        this.djList = res.toplist.map((item) => item.program);
+        this.djList = res.toplist.map((item: any) => item.program);
       });
     }
   }

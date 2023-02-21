@@ -7,6 +7,19 @@ export function formatUTC(utcStr: string, format = "YYYY-MM-DD hh:ss:mm") {
   return dayjs.utc(utcStr).utcOffset(8).format(format);
 }
 
+export function formatTimeDiff(time: number) {
+  const current = new Date();
+  const days = dayjs(current).diff(dayjs(time), "days") + 1;
+  if (days < 10) {
+    return days + "天前";
+  }
+  const oldTime = dayjs(time).year();
+  const newTime = dayjs(current).year();
+  if (oldTime === newTime) {
+    return formatDate(time, "MM-DD");
+  }
+  return formatDate(time, "YYYY-MM-DD");
+}
 export function formatDate(time: number, format = "YYYY-MM-DD hh:ss:mm") {
   return dayjs(time).format(format);
 }

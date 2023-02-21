@@ -26,12 +26,14 @@ interface IMusicStore {
   // 当前电台
   currentDj: {
     name: string;
+    coverUrl: string;
+    authorName: string[];
+
     pageID: number;
     musicID: number;
-    authorName: string[];
     categoryName: string;
     createTime: number;
-    coverUrl: string;
+
     desc: string;
     listenerCount: number;
     radio: {
@@ -63,45 +65,43 @@ interface IMusicStore {
 }
 
 const useMusicStore = defineStore("music", {
-  state: (): IMusicStore => {
-    return {
-      currentMusic: {
-        id: 1,
-        authorName: [],
+  state: (): IMusicStore => ({
+    currentMusic: {
+      id: 1,
+      authorName: [],
+      name: "",
+      picUrl: "",
+      url: ""
+    },
+    currentDj: {
+      name: "",
+      pageID: 0,
+      musicID: 0,
+      authorName: [],
+      coverUrl: "",
+      categoryName: "",
+      createTime: 0,
+      desc: "",
+      listenerCount: 0,
+      radio: {
+        id: 0,
         name: "",
-        picUrl: "",
-        url: ""
-      },
-      currentDj: {
-        name: "",
-        pageID: 0,
-        musicID: 0,
-        authorName: [],
+        subCount: 0,
+        updatedTime: 0,
         coverUrl: "",
-        categoryName: "",
-        createTime: 0,
-        desc: "",
-        listenerCount: 0,
-        radio: {
-          id: 0,
-          name: "",
-          subCount: 0,
-          updatedTime: 0,
-          coverUrl: "",
-          shareCount: 0
-        },
-        recommend: []
+        shareCount: 0
       },
-      isPlayer: false,
-      onlyOne: false,
-      currentStatus: 0,
-      currentTime: 0,
-      duration: 0,
-      currentIndex: 0,
-      lrcs: [],
-      type: 0
-    };
-  },
+      recommend: []
+    },
+    isPlayer: false,
+    onlyOne: false,
+    currentStatus: 0,
+    currentTime: 0,
+    duration: 0,
+    currentIndex: 0,
+    lrcs: [],
+    type: 0
+  }),
   actions: {
     async getMusicURLByIdAction(id: string, type?: number, djId?: number) {
       try {

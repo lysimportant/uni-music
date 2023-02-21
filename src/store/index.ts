@@ -8,6 +8,7 @@ import useIndexStore from "./index/index";
 import useCommunityStore from "./community";
 import useMusicStore from "./music";
 import useCommonStore from "./common";
+import useDJStore from "./dj";
 
 // const res = import.meta.glob("./**/*.ts", {
 //   eager: true
@@ -23,4 +24,10 @@ export default function (app: App) {
   app.use(pinia);
 }
 
-export { useMusicStore, useCommunityStore, useIndexStore, useCommonStore };
+export {
+  useMusicStore,
+  useCommunityStore,
+  useIndexStore,
+  useCommonStore,
+  useDJStore
+};

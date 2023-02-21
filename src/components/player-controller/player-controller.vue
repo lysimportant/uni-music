@@ -35,7 +35,14 @@
 <script setup lang="ts">
 import { useMusicStore } from "@/store";
 import { storeToRefs } from "pinia";
-
+withDefaults(
+  defineProps<{
+    bottom?: string;
+  }>(),
+  {
+    bottom: "45px"
+  }
+);
 const musicStore = useMusicStore();
 const { currentMusic, isPlayer, currentDj } = storeToRefs(musicStore);
 
@@ -58,7 +65,7 @@ export default {
 .player-controller {
   position: fixed;
   /* #ifdef H5 */
-  bottom: 45px;
+  bottom: v-bind("$props.bottom");
   /* #endif */
   /* #ifndef H5 */
   bottom: 0;
@@ -70,6 +77,7 @@ export default {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
+  color: #000;
   .pic-url {
     border: 8px solid #000;
     border-radius: 50%;

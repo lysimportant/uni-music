@@ -36,5 +36,5 @@ export function getReommendDjService() {
  * @returns 返回播客数据
  */
 export function getDjAllDetailService(id: any) {
-  return hjRequest.get({ url: `/dj/program?rid=${id}&limit=10` });
+  return hjRequest.get({ url: `/dj/program?rid=${id}` });
 }

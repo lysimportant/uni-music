@@ -4,11 +4,9 @@ interface ICommunityState {
   recommendVideo: any[];
 }
 const communityStore = defineStore("community", {
-  state: (): ICommunityState => {
-    return {
-      recommendVideo: []
-    };
-  },
+  state: (): ICommunityState => ({
+    recommendVideo: []
+  }),
   actions: {
     getCommunityData() {
       getCommunityRecommendVideos().then((res) => {

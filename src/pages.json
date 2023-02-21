@@ -50,12 +50,24 @@
           }
         }
       ]
+    },
+    {
+      "root": "subPlayDetail",
+      "pages": [
+        {
+          "path": "detail/detail",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        }
+      ]
     }
   ],
   "preloadRule": {
     "pages/index/index": {
       "network": "all",
-      "packages": ["subPlay"]
+      "packages": ["subPlay", "subPlayDetail"]
     }
   },
   "requiredBackgroundModes": ["audio", "location"],
