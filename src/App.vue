@@ -61,4 +61,22 @@
     transform: rotate(360deg);
   }
 }
+
+.animation_opticy {
+  -webkit-animation: my_opcity 0.4s linear forwards; /* Chrome, Safari, Opera */
+  animation: my_opcity 0.4s linear forwards;
+}
+.animation_opticy_reverse {
+  -webkit-animation: my_opcity 0.55s linear reverse; /* Chrome, Safari, Opera */
+  animation: my_opcity 0.55s linear reverse;
+}
+@keyframes my_opcity {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
 </style>

@@ -1,17 +1,13 @@
 <template>
-  <view
-    class="music-list"
-    :style="{
-      background: anima ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.1)'
-    }"
-    v-if="playList.length > 0"
-    @click.stop="handleBgClick"
-  >
+  <view class="music-list" @tap.stop @touchmove.stop v-if="showMain">
+    <view
+      class="music-list-bg"
+      :class="activeMain && 'music-list-bg_active'"
+      @click.stop="handleBgClick"
+    />
     <view
       class="music-list-content"
-      :style="{
-        bottom: anima ? '15px' : '-9999px'
-      }"
+      :class="activeMain && 'music-list-content_active'"
     >
       <view class="header">
         <text class="title_h1">当前播放</text>({{ playList.length }})
@@ -53,17 +49,35 @@ import { useMusicStore } from "@/store";
 import { storeToRefs } from "pinia";
 
 import { formatMusicTime, pauseMusic } from "@/utils";
-import { onMounted, ref } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 const emit = defineEmits(["update:modelValue"]);
 const props = defineProps<{
   modelValue: boolean;
 }>();
 
 const musicStore = useMusicStore();
-const anima = ref(true);
-onMounted(() => {
-  anima.value = true;
-});
+
+const showMain = ref(false);
+const activeMain = ref(false);
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    console.log("watch=>", newVal);
+    if (newVal) {
+      showMain.value = true;
+      setTimeout(() => {
+        activeMain.value = true;
+      });
+    } else {
+      activeMain.value = false;
+      setTimeout(() => {
+        showMain.value = false;
+      }, 300);
+      // 300的延迟是和transition的动画时间一致
+    }
+  }
+);
+
 const { playList, currentPlayIndex, currentStatus, isPlayer, currentTime } =
   storeToRefs(musicStore);
 function handlePlayClick(item: any) {
@@ -75,12 +89,7 @@ function handlePlayClick(item: any) {
 }
 
 function handleBgClick() {
-  anima.value = false;
-  console.log("first 触发了 handleBgClick>>>>>>> 开始动画");
-  setTimeout(() => {
-    emit("update:modelValue", !props.modelValue);
-    console.log("first 触发了 handleBgClick>>>>>>> 动画完成");
-  }, 1000);
+  emit("update:modelValue", !props.modelValue); // 只更新外部的值，内部由watch去处理
 }
 const playStatus = [
   {
@@ -100,23 +109,38 @@ const playStatus = [
 
 <style scoped lang="scss">
 .music-list {
-  position: relative;
+  position: fixed;
+  top: 0;
   bottom: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.3);
-  transition: all 0.3s;
-  .music-list-content {
+  left: 0;
+  right: 0;
+  z-index: 9;
+  &-bg {
     position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: all 0.3s ease-out;
+    &_active {
+      opacity: 1;
+    }
+  }
+  &-content {
+    position: absolute;
+    bottom: 0;
     background-color: #fff;
     width: 90%;
     padding: 20px;
     border-radius: 15px;
-    transform: translateX(5%);
-    bottom: 15px;
+    transform: translateX(5%) translateY(100%);
     transition: all 0.3s;
-
     z-index: 999;
+    &_active {
+      transform: translateX(5%) translateY(-15px);
+    }
     .header {
       position: sticky;
       top: 0;

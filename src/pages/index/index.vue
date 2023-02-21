@@ -15,12 +15,7 @@
       <IndexDj :dj-list="djList"></IndexDj>
     </view>
     <player-controller @show-list="isShow = !isShow"></player-controller>
-    <view
-      class="fxied-box"
-      :style="{ bottom: isShow ? '0' : '-99999999px', opacity: isShow ? 1 : 0 }"
-    >
-      <music-list v-model="isShow"></music-list>
-    </view>
+    <music-list v-model="isShow"></music-list>
   </view>
 </template>
 
