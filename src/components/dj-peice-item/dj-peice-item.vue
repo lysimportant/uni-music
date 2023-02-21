@@ -1,7 +1,7 @@
 <template>
   <view class="dj-peice-item" @click="$emit('click', item)">
     <template v-if="showPic">
-      <image class="image" :src="item.blurCoverUrl" mode="heightFix" />
+      <image class="image" :src="item.blurCoverUrl" />
     </template>
     <view class="content">
       <view class="name">{{ item.name }}</view>
@@ -34,6 +34,7 @@ export default {
   display: flex;
   margin: 10rpx 0;
   .image {
+    width: 120rpx;
     height: 120rpx;
     border-radius: 10rpx;
   }

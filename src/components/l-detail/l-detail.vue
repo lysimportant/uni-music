@@ -15,15 +15,11 @@
           }"
         ></view>
         <view class="header" v-if="detail">
-          <image class="header-image" :src="detail.picUrl" mode="widthFix" />
+          <image class="header-image" :src="detail.picUrl" />
           <view class="header-info">
             <view class="header-info-name">{{ detail.name }}</view>
             <view class="header-info-author">
-              <image
-                class="author-image"
-                :src="detail?.avatarUrl"
-                mode="widthFix"
-              />
+              <image class="author-image" :src="detail?.avatarUrl" />
               <text>{{ detail?.nickname }}</text>
             </view>
             <view class="header-info-tags tag">
@@ -86,6 +82,7 @@ function backClick() {
         padding-top: 30rpx;
         &-image {
           width: 200rpx;
+          height: 200rpx;
           border-radius: 20rpx;
         }
         &-info {
@@ -100,6 +97,7 @@ function backClick() {
             .author-image {
               z-index: 5;
               width: 50rpx;
+              height: 50rpx;
               vertical-align: middle;
               margin-right: 10rpx;
               border-radius: 50%;

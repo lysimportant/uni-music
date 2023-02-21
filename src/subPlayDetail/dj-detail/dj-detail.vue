@@ -4,11 +4,7 @@
       <template v-for="item of list" :key="item.id">
         <flex-cpn>
           <template #left>
-            <image
-              class="detail-content__body__image"
-              :src="item.coverUrl"
-              mode="widthFix"
-            />
+            <image class="detail-content__body__image" :src="item.coverUrl" />
           </template>
           <template #center>
             <view
@@ -65,9 +61,13 @@ onLoad(function (options: any) {
 </script>
 
 <style scoped lang="scss">
+.flex-cpn {
+  margin: 10rpx 0;
+}
 .detail-content__body {
   &__image {
     width: 100%;
+    height: 100%;
     border-radius: 10rpx;
   }
   &__info {

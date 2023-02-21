@@ -5,11 +5,7 @@
       class="pic-url animation_rotate"
       :style="{ 'animation-play-state': isPlayer ? 'running' : 'paused' }"
     >
-      <image
-        class="image"
-        :src="currentDj.coverUrl ?? currentMusic.picUrl"
-        mode="heightFix"
-      />
+      <image class="image" :src="currentDj.coverUrl ?? currentMusic.picUrl" />
     </view>
     <view class="info" @click="handleJumpPage">
       <text class="song-name">
@@ -86,6 +82,7 @@ export default {
     margin-left: 40rpx;
     margin-right: 15rpx;
     .image {
+      width: 100%;
       height: 100%;
       border-radius: 50%;
     }

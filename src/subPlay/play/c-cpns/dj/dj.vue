@@ -11,11 +11,7 @@
         <view class="detail" @click="handleJumpClick">
           <flex-cpn height="60px">
             <template #left>
-              <image
-                class="detail-image"
-                :src="currentDj.radio.coverUrl"
-                mode="widthFix"
-              />
+              <image class="detail-image" :src="currentDj.radio.coverUrl" />
             </template>
             <template #center>
               <view class="detail-info">
@@ -60,11 +56,7 @@
                 }"
               >
                 <template #left>
-                  <image
-                    class="recommend-image"
-                    :src="item.picUrl"
-                    mode="widthFix"
-                  />
+                  <image class="recommend-image" :src="item.picUrl" />
                 </template>
 
                 <template #center>
@@ -131,6 +123,7 @@ const list = [
 
     &-image {
       width: 100%;
+      height: 100%;
       border-radius: 10rpx;
     }
     &-info {
@@ -199,6 +192,7 @@ const list = [
     }
     &-image {
       width: 100%;
+      height: 100%;
       border-radius: 10rpx;
     }
     &-info {

@@ -7,7 +7,7 @@
       }"
       class="pan animation_rotate"
     >
-      <image class="pan-image" :src="currentMusic.picUrl" mode="heightFix" />
+      <image class="pan-image" :src="currentMusic.picUrl" />
     </view>
     <image
       :style="{
@@ -17,7 +17,6 @@
       }"
       :src="gan"
       class="gan"
-      mode="heightFix"
     />
   </view>
 </template>
@@ -69,6 +68,7 @@ export default {
     align-items: center;
     .pan-image {
       border-radius: 50%;
+      width: 380rpx;
       height: 380rpx;
     }
   }
@@ -77,6 +77,8 @@ export default {
     top: -10%;
     transition: all 0.3s;
     transform-origin: 20px 70px;
+    width: 160px;
+    height: 240px;
   }
 }
 </style>

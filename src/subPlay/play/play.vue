@@ -29,7 +29,7 @@
       </template>
       <template v-else>
         <view class="dj">
-          <image class="dj-image" :src="currentDj.coverUrl" mode="widthFix" />
+          <image class="dj-image" :src="currentDj.coverUrl" />
         </view>
       </template>
 
@@ -148,6 +148,7 @@ export default {
       margin: 150rpx auto;
       .dj-image {
         width: 400rpx;
+        height: 400rpx;
         border-radius: 20rpx;
       }
     }

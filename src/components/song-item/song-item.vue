@@ -1,7 +1,7 @@
 <template>
   <view class="song-item" @click="handleItemClick">
     <view class="bg"></view>
-    <image class="image" :src="item.picUrl" mode="heightFix" />
+    <image class="image" :src="item.picUrl" />
     <text class="text">{{ item?.name }}</text>
   </view>
 </template>
@@ -44,6 +44,7 @@ export default {
   .image {
     position: relative;
     z-index: 1;
+    width: 250rpx;
     height: 250rpx;
     border-radius: 10rpx;
   }

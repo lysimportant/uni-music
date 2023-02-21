@@ -2,7 +2,7 @@
   <view class="discover">
     <template v-for="(item, index) in discoverIcons" :key="item.id">
       <view class="item">
-        <image class="image" :src="item.iconUrl" mode="widthFix" />
+        <image class="image" :src="item.iconUrl" />
         <text v-if="index === 0" class="date">30</text>
         <text class="text">
           {{ item.name }}
@@ -46,6 +46,7 @@ defineProps<{
     }
     .image {
       width: 100rpx;
+      height: 100rpx;
     }
     .text {
       color: #666f7e;

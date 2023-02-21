@@ -4,11 +4,7 @@
       <template v-for="item of songDetail.AllSongs" :key="item.id">
         <flex-cpn>
           <template #left>
-            <image
-              class="detail-content__body__image"
-              :src="item.coverUrl"
-              mode="widthFix"
-            />
+            <image class="detail-content__body__image" :src="item.coverUrl" />
           </template>
           <template #center>
             <view
@@ -66,6 +62,7 @@ onLoad(function ({ id }: any) {
 .detail-content__body {
   &__image {
     width: 100%;
+    height: 100%;
     border-radius: 10rpx;
   }
   &__info {
