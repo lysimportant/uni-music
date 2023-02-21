@@ -8,7 +8,7 @@
     >
       {{ currentDj.radio }}
       <template #detail>
-        <view class="detail">
+        <view class="detail" @click="handleJumpClick">
           <flex-cpn height="60px">
             <template #left>
               <image
@@ -49,8 +49,16 @@
       <template #reommend>
         <view class="recommend">
           <scroll-view scroll-y class="scroll-Y">
-            <template v-for="item in currentDj.recommend" :key="item.id">
-              <flex-cpn>
+            <template
+              v-for="(item, index) in currentDj.recommend"
+              :key="item.id"
+            >
+              <flex-cpn
+                :style="{
+                  paddingBottom:
+                    index === currentDj.recommend.length - 1 ? '100px' : '0'
+                }"
+              >
                 <template #left>
                   <image
                     class="recommend-image"
@@ -86,7 +94,9 @@ import { computed } from "vue";
 const musicStore = useMusicStore();
 const { currentDj } = storeToRefs(musicStore);
 const countCmp = computed(() => formatCount);
-
+function handleJumpClick() {
+  console.log("first", currentDj.value);
+}
 const list = [
   {
     name: "详情",
@@ -109,7 +119,7 @@ const list = [
   /* #ifdef MP */
   top: 25%;
   /* #endif */
-  height: 250px;
+  height: 200px;
 
   .detail {
     // text-align: center;
@@ -176,8 +186,11 @@ const list = [
   }
   .recommend {
     width: 100%;
+    padding: 0 20rpx;
+    position: relative;
+    z-index: 10;
     .scroll-Y {
-      height: 100%;
+      height: 350px;
     }
     & > view {
       margin: 10rpx 0;
@@ -194,7 +207,7 @@ const list = [
         color: #fff;
       }
       .other {
-        font-size: 12rpx;
+        font-size: 20rpx;
         color: var(--default-color);
       }
     }
