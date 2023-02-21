@@ -14,7 +14,13 @@
       <IndexNewsongs :new-songs="newSongs" />
       <IndexDj :dj-list="djList"></IndexDj>
     </view>
-    <player-controller></player-controller>
+    <player-controller @show-list="isShow = !isShow"></player-controller>
+    <view
+      class="fxied-box"
+      :style="{ bottom: isShow ? '0' : '-99999999px', opacity: isShow ? 1 : 0 }"
+    >
+      <music-list v-model="isShow"></music-list>
+    </view>
   </view>
 </template>
 
@@ -29,7 +35,7 @@ import IndexDiscover from "./c-cpns/index-discover.vue";
 import IndexRecommendSongs from "./c-cpns/index-recommend-songs.vue";
 import IndexNewsongs from "./c-cpns/index-newsongs.vue";
 import IndexDj from "./c-cpns/index-dj.vue";
-
+const isShow = ref(false);
 // 获取数据
 const indexStore = useIndexStore();
 const commonStore = useCommonStore();

@@ -22,7 +22,7 @@
         ></text>
       </template>
       <template v-else>
-        <text :class="item"></text>
+        <text :class="item" @click="handleOperationClick(item)"></text>
       </template>
     </template>
   </view>
@@ -35,8 +35,18 @@ import { useMusicStore } from "@/store";
 
 import { playStatus, controllerIcons } from "../../config";
 
+const emit = defineEmits(["show-list"]);
+
 const musicStore = useMusicStore();
 const { isPlayer, currentStatus } = storeToRefs(musicStore);
+
+function handleOperationClick(item: string) {
+  console.log("first: ", item);
+  if (item.includes("list")) {
+    console.log("first: ", item);
+    emit("show-list");
+  }
+}
 
 // 切换模式显示
 function showModel() {

@@ -1,5 +1,5 @@
 <template>
-  <view class="detail">
+  <view class="detail" v-if="detail">
     <nav-bar>
       <template #left>
         <text @click="backClick" class="arrow icon-fanhui"> </text>
@@ -11,16 +11,16 @@
         <view
           class="bg"
           :style="{
-            backgroundImage: `url('${detail?.picUrl}')`
+            backgroundImage: `url('${detail.picUrl}')`
           }"
         ></view>
-        <view class="header" v-if="detail">
+        <view class="header">
           <image class="header-image" :src="detail.picUrl" />
           <view class="header-info">
             <view class="header-info-name">{{ detail.name }}</view>
             <view class="header-info-author">
-              <image class="author-image" :src="detail?.avatarUrl" />
-              <text>{{ detail?.nickname }}</text>
+              <image class="author-image" :src="detail.avatarUrl" />
+              <text>{{ detail.nickname }}</text>
             </view>
             <view class="header-info-tags tag">
               <template v-for="item of detail.categorys" :key="item">

@@ -4,7 +4,7 @@
       <text class="arrow icon-sanjiaoright"></text>
       <text class="arrow-line"></text>
       <text class="time"
-        >{{ formatCurrentMusic(currentTime * 1000) }} {{ currentTIme_ }}</text
+        >{{ formatCurrentMusic(currentTime) }} {{ currentTIme_ }}</text
       >
     </view>
     <scroll-view
@@ -73,7 +73,7 @@ function scroll(event: any) {
       const index = Math.floor(event.detail.scrollTop / 40);
       const time = lrcs.value[index]?.time;
       if (!time) break;
-      currentTIme_.value = formatMusicTime(time * 1000);
+      currentTIme_.value = formatMusicTime(time);
       break;
     }
   }

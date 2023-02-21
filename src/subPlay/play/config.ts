@@ -14,10 +14,10 @@ const playStatus = [
 ];
 
 const controllerIcons = [
-  "icon-per",
+  "icon-per per",
   "icon-zanting play",
   "icon-bofang play",
-  "icon-next",
+  "icon-next next",
   "icon-24gf-playlist list"
 ];
 function backClick() {

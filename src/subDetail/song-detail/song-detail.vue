@@ -1,8 +1,8 @@
 <template>
-  <l-detail :detail="djDetail">
+  <l-detail :detail="detailCmp">
     <template #body>
-      <template v-for="item of list" :key="item.id">
-        <flex-cpn>
+      <template v-for="item of songDetail.AllSongs" :key="item.id">
+        <flex-cpn margin="5px 0">
           <template #left>
             <image class="detail-content__body__image" :src="item.coverUrl" />
           </template>
@@ -23,6 +23,7 @@
               </view>
             </view>
           </template>
+          <template #right><text></text></template>
         </flex-cpn>
       </template>
     </template>
@@ -34,57 +35,36 @@ import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { onLoad } from "@dcloudio/uni-app";
 
-import { useDJStore, useMusicStore } from "@/store";
+import { useMusicStore } from "@/store";
 
 import { formatTimeDiff, formatCount, formatMusicTime } from "@/utils";
 
-const DJStore = useDJStore();
 const musicStore = useMusicStore();
-const { list, detail } = storeToRefs(DJStore);
+const { playList, songDetail } = storeToRefs(musicStore);
 
 function handlePlayClick(item: any) {
-  musicStore.getMusicURLByIdAction(item.mainSong.id);
-}
+  musicStore.getMusicURLByIdAction(item.id);
+  playList.value = [];
+  playList.value = songDetail.value.AllSongs;
 
-const djDetail = computed(() => ({
-  avatarUrl: detail.value.dj?.avatarUrl,
-  picUrl: detail.value.picUrl,
-  name: detail.value.name,
-  nickname: detail.value.dj?.nickname,
-  categorys: [detail.value.category],
-  desc: detail.value.desc
+  uni.navigateTo({
+    url: "/subPlay/play/play"
+  });
+}
+const detailCmp = computed(() => ({
+  picUrl: songDetail.value.coverImgUrl,
+  name: songDetail.value.name,
+  nickname: songDetail.value.creator.nickname,
+  avatarUrl: songDetail.value.creator.avatarUrl,
+  categorys: songDetail.value.tags,
+  desc: songDetail.value.description
 }));
 
-onLoad(function (options: any) {
-  DJStore.getDJDetailActions(options.cid);
+onLoad(function ({ id }: any) {
+  musicStore.getSongDetailActions(id);
 });
 </script>
 
 <style scoped lang="scss">
-.flex-cpn {
-  margin: 10rpx 0;
-}
-.detail-content__body {
-  &__image {
-    width: 100%;
-    height: 100%;
-    border-radius: 10rpx;
-  }
-  &__info {
-    padding: 0 20rpx;
-    text-align: left;
-
-    &__name {
-      line-height: 35px;
-      font-size: 20px;
-    }
-    &__other {
-      text {
-        font-size: 20rpx;
-        color: var(--default-color);
-        margin-right: 20rpx;
-      }
-    }
-  }
-}
+@import "../commom/common.scss";
 </style>

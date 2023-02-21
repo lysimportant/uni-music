@@ -16,7 +16,22 @@
 }
 .title_h1 {
   font-weight: 700;
-  font-size: 22px;
+  font-size: 20px;
+}
+
+.over-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fxied-box {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: -99999999px;
+  height: 100vh;
+  transition: all 1s;
+  z-index: 99999999999999999999;
 }
 
 .title_h2 {

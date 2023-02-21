@@ -1,21 +1,19 @@
 <template>
-  <view class="player-controller" v-if="currentMusic.url !== ''">
+  <view class="player-controller" v-if="playList.length > 0">
     <view
       @click="handleJumpPage"
       class="pic-url animation_rotate"
       :style="{ 'animation-play-state': isPlayer ? 'running' : 'paused' }"
     >
-      <image class="image" :src="currentDj.coverUrl ?? currentMusic.picUrl" />
+      <image class="image" :src="coverUrl" />
     </view>
     <view class="info" @click="handleJumpPage">
       <text class="song-name">
-        {{ currentDj.name ?? currentMusic.name }}
+        {{ name }}
       </text>
       <text class="author-name">
         -
-        {{
-          currentDj.authorName.join("/") ?? currentMusic.authorName.join("/")
-        }}
+        {{ authorName.join("/") }}
       </text>
     </view>
     <view class="controller">
@@ -23,7 +21,7 @@
         @click="operation"
         :class="[isPlayer ? 'icon-zanting' : 'icon-bofang']"
       ></text>
-      <text class="icon-24gf-playlist"></text>
+      <text class="icon-24gf-playlist" @click.prevent="handleEmitClick"></text>
     </view>
   </view>
 </template>
@@ -31,6 +29,7 @@
 <script setup lang="ts">
 import { useMusicStore } from "@/store";
 import { storeToRefs } from "pinia";
+const emit = defineEmits(["showList"]);
 withDefaults(
   defineProps<{
     bottom?: string;
@@ -40,12 +39,18 @@ withDefaults(
   }
 );
 const musicStore = useMusicStore();
-const { currentMusic, isPlayer, currentDj } = storeToRefs(musicStore);
+const { coverUrl, authorName, name, isPlayer, playList } =
+  storeToRefs(musicStore);
 
 function handleJumpPage() {
   uni.navigateTo({
     url: "/subPlay/play/play"
   });
+}
+
+function handleEmitClick() {
+  console.log("first 触发显示菜单~~~~~~");
+  emit("showList");
 }
 function operation() {
   musicStore.toggleMusicAction();

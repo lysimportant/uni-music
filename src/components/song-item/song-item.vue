@@ -12,7 +12,7 @@ const props = defineProps<{
 
 function handleItemClick() {
   uni.navigateTo({
-    url: `/subPlayDetail/song-detail/song-detail?id=${props.item.id}`
+    url: `/subDetail/song-detail/song-detail?id=${props.item.id}`
   });
 }
 </script>

@@ -3,7 +3,7 @@
     <view
       class="bg"
       :style="{
-        backgroundImage: `url('${currentDj.coverUrl ?? currentMusic.picUrl}')`
+        backgroundImage: `url('${coverUrl}')`
       }"
     ></view>
     <view class="play-index-content">
@@ -13,8 +13,8 @@
         </template>
         <template #center>
           <view class="content">
-            <view class="name">{{ currentDj.name ?? currentMusic.name }}</view>
-            <view class="author">{{ currentMusic.authorName.join("/") }}</view>
+            <view class="name">{{ name }}</view>
+            <view class="author">{{ authorName.join("/") }}</view>
           </view>
         </template>
         <template #right></template>
@@ -29,15 +29,20 @@
       </template>
       <template v-else>
         <view class="dj">
-          <image class="dj-image" :src="currentDj.coverUrl" />
+          <image class="dj-image" :src="coverUrl" />
         </view>
       </template>
 
       <view class="operation">
         <Interaction />
         <Slider />
-        <Controller />
+        <Controller @show-list="isShow = !isShow" />
       </view>
+
+      <music-list
+        v-model="isShow"
+        :bottom="isShow ? '0' : '-9999999999px'"
+      ></music-list>
 
       <template v-if="type">
         <Dj />
@@ -65,7 +70,9 @@ import Controller from "./c-cpns/controller/controller.vue";
 import Interaction from "./c-cpns/interaction/interaction.vue";
 
 const musicStore = useMusicStore();
-const { currentMusic, type, currentDj } = storeToRefs(musicStore);
+const { type, name, authorName, coverUrl } = storeToRefs(musicStore);
+
+const isShow = ref(false);
 
 function change(event: any) {
   console.log("first: ", event);

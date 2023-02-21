@@ -9,15 +9,14 @@ player = uni.getBackgroundAudioManager(); // UniApp.BackgroundAudioManager
  * @param music 音乐数据
  * @param fn 回调操作
  */
-export function loadMusic(music: any, fn?: (flag: boolean) => void) {
-  // #ifdef H5
-  player.src = music.url;
-  // #endif
-  // #ifndef H5
-  player.src = music.url;
-  // #endif
+export function loadMusic(url: any, fn?: (flag: boolean) => void) {
+  console.log("first url: ", url);
+  player.src = url;
   player.play();
-  fn?.(true);
+  player.onCanplay(() => {
+    fn?.(true);
+    console.log("音乐可以播放了");
+  });
 }
 
 /**
@@ -30,11 +29,20 @@ export function playMusic(fn?: (flag: boolean) => void) {
 }
 
 /**
- * 停止播放
+ * 暂停播放
  * @param fn 回调操作
  */
 export function pauseMusic(fn?: (flag: boolean) => void) {
   player.pause();
+  fn?.(false);
+}
+
+/**
+ * 停止播放
+ * @param fn 回调操作
+ */
+export function stopMusic(fn?: (flag: boolean) => void) {
+  player.stop();
   fn?.(false);
 }
 /**

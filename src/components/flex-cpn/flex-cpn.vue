@@ -3,7 +3,9 @@
     <view class="left" :style="{ width: lfetWidth }">
       <slot name="left">左</slot></view
     >
-    <view class="center"> <slot name="center">中</slot></view>
+    <view class="center" :style="{ maxWidth: widthCmp }">
+      <slot name="center">中</slot></view
+    >
     <view class="right" :style="{ width: rightWidth }">
       <slot name="right">右</slot></view
     >
@@ -11,7 +13,9 @@
 </template>
 
 <script lang="ts" setup>
-withDefaults(
+import { computed } from "vue";
+
+const props = withDefaults(
   defineProps<{
     lfetWidth?: string;
     rightWidth?: string;
@@ -23,6 +27,11 @@ withDefaults(
     rightWidth: "15%"
   }
 );
+const widthCmp = computed(() => {
+  const left = Number(props.lfetWidth.replace("%", "").trim());
+  const right = Number(props.rightWidth.replace("%", "").trim());
+  return 100 - left - right + "%";
+});
 </script>
 
 <style scoped lang="scss">

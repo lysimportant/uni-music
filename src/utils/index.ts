@@ -9,6 +9,6 @@ export * from "./debounce";
  * @param all 长度
  * @returns 返回一个字符串
  */
-export function handler_(name, index, all) {
+export function handler_(name: string, index: number, all: number) {
   return index === all ? name : name + "-";
 }

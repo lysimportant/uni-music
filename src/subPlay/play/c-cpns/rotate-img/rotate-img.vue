@@ -7,7 +7,7 @@
       }"
       class="pan animation_rotate"
     >
-      <image class="pan-image" :src="currentMusic.picUrl" />
+      <image class="pan-image" :src="coverUrl" />
     </view>
     <image
       :style="{
@@ -30,7 +30,7 @@ import pan from "@/static/play/pan.png";
 
 defineEmits(["show-lrc"]);
 const musicStore = useMusicStore();
-const { currentMusic, isPlayer } = storeToRefs(musicStore);
+const { coverUrl, isPlayer } = storeToRefs(musicStore);
 </script>
 <script lang="ts">
 export default {

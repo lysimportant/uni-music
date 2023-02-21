@@ -14,7 +14,7 @@ defineProps<{
 const musicStore = useMusicStore();
 
 function djClick(item: any) {
-  if (musicStore.currentMusic.id == item.mainSong.id) {
+  if (musicStore.id == item.mainSong.id) {
     uni.navigateTo({
       url: "/subPlay/play/play"
     });

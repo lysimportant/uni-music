@@ -1,11 +1,12 @@
 <template>
-  <l-detail :detail="detailCmp">
+  <l-detail :detail="DJDetail">
     <template #body>
-      <template v-for="item of songDetail.AllSongs" :key="item.id">
-        <flex-cpn>
+      <template v-for="item of playList" :key="item.id">
+        <flex-cpn margin="5px 0">
           <template #left>
             <image class="detail-content__body__image" :src="item.coverUrl" />
           </template>
+
           <template #center>
             <view
               class="detail-content__body__info"
@@ -23,6 +24,7 @@
               </view>
             </view>
           </template>
+          <template #right><text></text></template>
         </flex-cpn>
       </template>
     </template>
@@ -39,47 +41,29 @@ import { useMusicStore } from "@/store";
 import { formatTimeDiff, formatCount, formatMusicTime } from "@/utils";
 
 const musicStore = useMusicStore();
-const { songDetail } = storeToRefs(musicStore);
+const { playList, DJDetail } = storeToRefs(musicStore);
 
 function handlePlayClick(item: any) {
-  musicStore.getMusicURLByIdAction(item.id);
+  musicStore.getMusicURLByIdAction(item.mainSong.id, 1, item.id);
+  uni.navigateTo({
+    url: "/subPlay/play/play"
+  });
 }
-const detailCmp = computed(() => ({
-  picUrl: songDetail.value.coverImgUrl,
-  name: songDetail.value.name,
-  nickname: songDetail.value.creator.nickname,
-  avatarUrl: songDetail.value.creator.avatarUrl,
-  categorys: songDetail.value.tags,
-  desc: songDetail.value.description
+
+const djDetail = computed(() => ({
+  avatarUrl: DJDetail.value.dj?.avatarUrl,
+  picUrl: DJDetail.value.picUrl,
+  name: DJDetail.value.name,
+  nickname: DJDetail.value.dj?.nickname,
+  categorys: [DJDetail.value.category],
+  desc: DJDetail.value.desc
 }));
 
-onLoad(function ({ id }: any) {
-  musicStore.getSongDetailActions(id);
+onLoad(function (options: any) {
+  musicStore.getDJDetailActions(options.cid);
 });
 </script>
 
 <style scoped lang="scss">
-.detail-content__body {
-  &__image {
-    width: 100%;
-    height: 100%;
-    border-radius: 10rpx;
-  }
-  &__info {
-    padding: 0 20rpx;
-    text-align: left;
-
-    &__name {
-      line-height: 35px;
-      font-size: 20px;
-    }
-    &__other {
-      text {
-        font-size: 20rpx;
-        color: var(--default-color);
-        margin-right: 20rpx;
-      }
-    }
-  }
-}
+@import "../commom/common.scss";
 </style>

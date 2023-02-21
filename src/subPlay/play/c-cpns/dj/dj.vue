@@ -22,12 +22,13 @@
                 </view>
               </view>
             </template>
+            <template #right><text></text></template>
           </flex-cpn>
         </view>
         <view class="detail-other">
           <view class="header">
             <text class="tag">{{ currentDj.categoryName }}</text>
-            <text class="name">{{ currentDj.name }}</text>
+            <text class="name">{{ name }}</text>
           </view>
           <view class="time">
             <text
@@ -50,6 +51,8 @@
               :key="item.id"
             >
               <flex-cpn
+                margin="10px 0"
+                @click="handleRecommendClick(item)"
                 :style="{
                   paddingBottom:
                     index === currentDj.recommend.length - 1 ? '100px' : '0'
@@ -84,13 +87,21 @@ import { useMusicStore } from "@/store";
 import { formatCount, formatDate } from "@/utils";
 import { computed } from "vue";
 const musicStore = useMusicStore();
-const { currentDj } = storeToRefs(musicStore);
+const { currentDj, name } = storeToRefs(musicStore);
 const countCmp = computed(() => formatCount);
 function handleJumpClick() {
   uni.navigateTo({
-    url: `/subPlayDetail/dj-detail/dj-detail?cid=${currentDj.value.radio.id}`
+    url: `/subDetail/dj-detail/dj-detail?cid=${currentDj.value.radio.id}`
   });
 }
+
+function handleRecommendClick(item: any) {
+  console.log("first: ", item);
+  uni.navigateTo({
+    url: `/subDetail/dj-detail/dj-detail?cid=${item.id}`
+  });
+}
+
 const list = [
   {
     name: "详情",
@@ -108,7 +119,7 @@ const list = [
   position: relative;
   padding: 0 10px;
   /* #ifndef MP */
-  top: 11%;
+  top: 15%;
   /* #endif */
   /* #ifdef MP */
   top: 25%;
@@ -186,9 +197,9 @@ const list = [
     z-index: 10;
     .scroll-Y {
       height: 350px;
-    }
-    & > view {
-      margin: 10rpx 0;
+      &:last-child {
+        padding-bottom: 100px;
+      }
     }
     &-image {
       width: 100%;

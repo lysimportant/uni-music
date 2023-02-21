@@ -52,7 +52,7 @@
       ]
     },
     {
-      "root": "subPlayDetail",
+      "root": "subDetail",
       "pages": [
         {
           "path": "dj-detail/dj-detail",
@@ -74,7 +74,7 @@
   "preloadRule": {
     "pages/index/index": {
       "network": "all",
-      "packages": ["subPlay", "subPlayDetail"]
+      "packages": ["subPlay", "subDetail"]
     }
   },
   "requiredBackgroundModes": ["audio", "location"],

@@ -1,19 +1,13 @@
 type LrcType = { time: number; lrc: string };
 export default interface IMusicStore {
   // 当前音乐的信息
-  currentMusic: {
-    id: number | string;
-    url: string;
-    authorName: string[];
-    name: string;
-    picUrl: string;
-  };
+  id: number | string;
+  url: string;
+  authorName: string[];
+  name: string;
+  coverUrl: string;
   // 当前电台
   currentDj: {
-    name: string;
-    coverUrl: string;
-    authorName: string[];
-
     pageID: number;
     musicID: number;
     categoryName: string;
@@ -51,4 +45,8 @@ export default interface IMusicStore {
   songDetail: any;
   // 播放列表
   playList: any[];
+  // 播放详情
+  DJDetail: any;
+  // 播放索引
+  currentPlayIndex: number;
 }
