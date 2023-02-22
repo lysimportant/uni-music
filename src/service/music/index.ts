@@ -5,8 +5,8 @@ import hjRequest from "..";
  * @param id 音乐的ID
  * @returns 音乐的URL
  */
-export function getMusicURLByIdService(id: string) {
-  return hjRequest.get({ url: `/song/url/v1?id=${id}&level=exhigh` });
+export function getMusicURLByIdService(id: string[]) {
+  return hjRequest.get({ url: `/song/url/v1?id=${id.join(",")}&level=exhigh` });
 }
 /**
  * 检测音乐是否可以播放

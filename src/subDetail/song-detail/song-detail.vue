@@ -1,5 +1,5 @@
 <template>
-  <l-detail :detail="detailCmp">
+  <l-detail :detail="detailCmp" v-if="songDetail">
     <template #body>
       <template v-for="item of songDetail.AllSongs" :key="item.id">
         <flex-cpn margin="5px 0">
@@ -37,14 +37,25 @@ import { onLoad } from "@dcloudio/uni-app";
 
 import { useMusicStore } from "@/store";
 
-import { formatTimeDiff, formatCount, formatMusicTime } from "@/utils";
+import {
+  formatTimeDiff,
+  formatCount,
+  formatMusicTime,
+  pauseMusic
+} from "@/utils";
 
 const musicStore = useMusicStore();
 const { playList, songDetail } = storeToRefs(musicStore);
 
 function handlePlayClick(item: any) {
-  musicStore.getMusicURLByIdAction(item.id);
-  playList.value = [];
+  pauseMusic();
+  const _music = playList.value.findIndex((itemx: any) => itemx.id === item.id);
+  if (_music >= 0) {
+    musicStore.playListToggleActions(item);
+    return;
+  }
+
+  musicStore.getMusicURLByIdAction(item.id, 1, 0, true);
   playList.value = songDetail.value.AllSongs;
 
   uni.navigateTo({

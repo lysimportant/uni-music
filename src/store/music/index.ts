@@ -23,6 +23,13 @@ const useMusicStore = defineStore("music", {
     coverUrl: "",
     url: "",
     id: 0,
+
+    isPlayer: false,
+    currentStatus: 0,
+    currentTime: 0,
+    duration: 0,
+    type: 0,
+
     currentDj: {
       pageID: 0,
       musicID: 0,
@@ -40,22 +47,28 @@ const useMusicStore = defineStore("music", {
       },
       recommend: []
     },
-    isPlayer: false,
     onlyOne: false,
-    currentStatus: 0,
-    currentTime: 0,
-    duration: 0,
+
     currentIndex: 0,
     lrcs: [],
-    type: 0,
     songDetail: {},
     playList: [],
     DJDetail: {},
     currentPlayIndex: 0
   }),
   actions: {
-    async getMusicURLByIdAction(id: string, type?: number, djId?: number) {
+    async getMusicURLByIdAction(
+      id: string,
+      type?: number,
+      djId?: number,
+      single_flag?: boolean
+    ) {
       try {
+        pauseMusic((falg: boolean) => {
+          this.isPlayer = falg;
+          this.currentTime = 0;
+          this.duration = 0;
+        });
         // 判断是否在列表当中
         const _music = this.playList.findIndex((item: any) => item.id === id);
         if (_music >= 0) {
@@ -139,14 +152,12 @@ const useMusicStore = defineStore("music", {
           const { data }: any = await getDjDetailService(
             this.currentDj.radio.id
           );
-          console.log(data);
           this.currentDj.radio.name = data.name;
           this.currentDj.radio.coverUrl = data.picUrl;
           this.currentDj.radio.updatedTime = data.lastProgramCreateTime;
           this.currentDj.radio.subCount = data.subCount;
           this.currentDj.radio.shareCount = data.shareCount;
           getReommendDjService().then((res) => {
-            console.log(res.djRadios);
             this.currentDj.recommend = res.djRadios;
           });
         }
@@ -154,18 +165,20 @@ const useMusicStore = defineStore("music", {
         this.currentTime = 0;
 
         // 准备播放
-        getMusicURLByIdService(id).then((res) => {
+
+        getMusicURLByIdService([id]).then((res) => {
           this.url = res.data[0].url;
-          this.playList.unshift({
-            id: id,
-            name: this.name,
-            url: this.url,
-            authorName: this.authorName,
-            duration: this.duration,
-            coverUrl: this.coverUrl,
-            type: type
-          });
-          this.currentPlayIndex = 0;
+
+          !single_flag &&
+            this.playList.unshift({
+              id: id,
+              name: this.name,
+              url: this.url,
+              authorName: this.authorName,
+              duration: this.duration,
+              coverUrl: this.coverUrl,
+              type: type
+            });
           loadMusic(this.url, (falg) => {
             this.isPlayer = falg;
           });
@@ -190,32 +203,61 @@ const useMusicStore = defineStore("music", {
       this.songDetail = res.playlist;
 
       const mids = res.playlist.trackIds.map((item: any) => item.id);
-      getMusicDetailByIdService(mids).then((res) => {
-        this.songDetail.AllSongs = res.songs.map((item: any) => ({
-          name: item.name, // 音乐的名字
-          id: item.id,
-          duration: item.dt,
-          authorName: item.ar.map((item: any) => item.name),
-          coverUrl: item.al.picUrl,
-          fee: item.fee
-        }));
-        console.log("first 请求musicdetail: ", this.songDetail.AllSongs);
+      getMusicDetailByIdService(mids).then(async (res) => {
+        const urlIDS = res.songs.map((item: any) => item.id);
+        const urlRes = await getMusicURLByIdService(urlIDS);
+
+        this.songDetail.AllSongs = res.songs.map(
+          (item: any, index: number) => ({
+            name: item.name, // 音乐的名字
+            id: item.id,
+            duration: item.dt,
+            authorName: item.ar.map((item: any) => item.name),
+            coverUrl: item.al.picUrl,
+            fee: item.fee,
+            url: urlRes.data[index].url
+          })
+        );
+        console.log(this.songDetail.AllSongs);
       });
     },
+    // 获取播客详情
     async getDJDetailActions(id: number) {
       const res = await getDjAllDetailService(id);
+      const urlIDS = res.programs.map((item: any) => item.mainTrackId);
+      const urlRes = await getMusicURLByIdService(urlIDS);
       this.playList = res.programs;
+      this.playList = res.programs.map((item: any, index: number) => ({
+        id: item.id,
+        djID: item.mainTrackId,
+        name: item.name,
+        coverUrl: item.coverUrl,
+        desc: item.desc,
+        scheduledPublishTime: item.scheduledPublishTime,
+        listenerCount: item.listenerCount,
+        duration: item.duration,
+        authorName: item.mainSong.artists.map((item: any) => item.name),
+        url: urlRes.data[index].url
+      }));
+
       const detail = await getDjDetailService(res.programs[0].radio.id);
       this.DJDetail = detail.data;
-      console.log(this.DJDetail);
+
+      console.log("p la ylist: ", this.playList, urlIDS, urlRes);
     },
-    playListToggleActions(payload: any) {
+    async playListToggleActions(payload: any, tpye = 0) {
+      pauseMusic((falg: boolean) => {
+        this.isPlayer = falg;
+        this.currentTime = 0;
+        this.duration = 0;
+      });
+      this.type = tpye;
       const _music = this.playList.findIndex(
         (item: any) => item.id === payload.id
       );
       console.log("找到了这个=========", _music, this.playList[_music]);
       if (_music >= 0) {
-        const { name, id, authorName, coverUrl, duration, url } =
+        const { type, name, id, authorName, coverUrl, duration, url } =
           this.playList[_music];
         this.name = name;
         this.id = id;
@@ -223,13 +265,28 @@ const useMusicStore = defineStore("music", {
         this.duration = duration;
         this.coverUrl = coverUrl;
         this.currentPlayIndex = _music;
-        getMusicLrcService(id).then((res) => {
-          const lrc = formatLrc(res.lrc.lyric);
-          this.lrcs = lrc;
-        });
-        loadMusic(url, (flag: boolean) => {
-          this.isPlayer = flag;
-        });
+        !type &&
+          getMusicLrcService(id).then((res) => {
+            const lrc = formatLrc(res.lrc.lyric);
+            console.log("first 查询歌词: ", lrc);
+            this.lrcs = lrc;
+          });
+
+        setTimeout(() => {
+          console.log(
+            "异步播放",
+            type,
+            name,
+            id,
+            authorName,
+            coverUrl,
+            duration,
+            url
+          );
+          loadMusic(url, (flag: boolean) => {
+            this.isPlayer = flag;
+          });
+        }, 50);
       }
     }
   }

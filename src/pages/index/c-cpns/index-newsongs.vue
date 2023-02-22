@@ -20,7 +20,7 @@ function songClick(id: number) {
     });
     return;
   }
-  musicStore.getMusicURLByIdAction(String(id));
+  musicStore.getMusicURLByIdAction(String(id), 0, 0, false);
 }
 </script>
 

@@ -36,15 +36,21 @@
         <slot name="body"></slot>
       </view>
     </view>
-    <player-controller bottom="0"></player-controller>
+    <player-controller
+      bottom="0"
+      @show-list="isShow = !isShow"
+    ></player-controller>
+    <music-list v-model="isShow"></music-list>
   </view>
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue";
+
 defineProps<{
   detail: any;
 }>();
-
+const isShow = ref(false);
 function backClick() {
   uni.navigateBack();
 }

@@ -56,9 +56,14 @@ const props = defineProps<{
 }>();
 
 const musicStore = useMusicStore();
-
+onMounted(() => {
+  musicStore.currentPlayIndex = musicStore.playList.findIndex(
+    (item: any) => item.id === musicStore.id
+  );
+});
 const showMain = ref(false);
 const activeMain = ref(false);
+// 异步修改样式
 watch(
   () => props.modelValue,
   (newVal) => {
@@ -84,8 +89,9 @@ function handlePlayClick(item: any) {
   pauseMusic((flag: boolean) => {
     isPlayer.value = flag;
     currentTime.value = 0;
+    console.log("first  音乐暂停");
   });
-  musicStore.playListToggleActions(item);
+  musicStore.playListToggleActions(item, 1);
 }
 
 function handleBgClick() {
@@ -114,7 +120,8 @@ const playStatus = [
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 9;
+  z-index: 9999;
+  color: #000;
   &-bg {
     position: absolute;
     top: 0;
@@ -163,6 +170,7 @@ const playStatus = [
         // display: flex;
         // justify-content: space-between;
         // align-items: center;
+
         padding: 20rpx 0;
         & > view {
           display: inline-block;

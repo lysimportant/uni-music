@@ -1,5 +1,5 @@
 <template>
-  <l-detail :detail="DJDetail">
+  <l-detail :detail="djDetail">
     <template #body>
       <template v-for="item of playList" :key="item.id">
         <flex-cpn margin="5px 0">
@@ -44,7 +44,7 @@ const musicStore = useMusicStore();
 const { playList, DJDetail } = storeToRefs(musicStore);
 
 function handlePlayClick(item: any) {
-  musicStore.getMusicURLByIdAction(item.mainSong.id, 1, item.id);
+  musicStore.getMusicURLByIdAction(item.djID, 1, item.id);
   uni.navigateTo({
     url: "/subPlay/play/play"
   });
