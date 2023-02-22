@@ -49,7 +49,6 @@ function handleJumpPage() {
 }
 
 function handleEmitClick() {
-  console.log("first 触发显示菜单~~~~~~");
   emit("showList");
 }
 function operation() {

@@ -20,10 +20,10 @@
         <template #right></template>
       </nav-bar>
       <template v-if="!type">
-        <view v-show="!showLrc">
+        <view v-if="!showLrc">
           <RotateImg @show-lrc="handleToggleImgLrc" />
         </view>
-        <view v-show="showLrc">
+        <view v-if="showLrc">
           <Lrc @show-lrc="handleToggleImgLrc" />
         </view>
       </template>
@@ -70,7 +70,7 @@ import Controller from "./c-cpns/controller/controller.vue";
 import Interaction from "./c-cpns/interaction/interaction.vue";
 
 const musicStore = useMusicStore();
-const { type, name, authorName, coverUrl } = storeToRefs(musicStore);
+const { type, lrcs, name, authorName, coverUrl } = storeToRefs(musicStore);
 
 const isShow = ref(false);
 

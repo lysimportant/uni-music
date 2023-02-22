@@ -22,7 +22,12 @@
         ></text>
       </template>
       <template v-else>
-        <text :class="item" @click="handleOperationClick(item)"></text>
+        <text
+          :class="item"
+          @tap.stop
+          @touchmove.top
+          @click.stop.prevent="handleOperationClick(item)"
+        ></text>
       </template>
     </template>
   </view>
@@ -38,13 +43,28 @@ import { playStatus, controllerIcons } from "../../config";
 const emit = defineEmits(["show-list"]);
 
 const musicStore = useMusicStore();
-const { isPlayer, currentStatus } = storeToRefs(musicStore);
+const { isPlayer, currentStatus, currentPlayIndex, type, playList } =
+  storeToRefs(musicStore);
 
 function handleOperationClick(item: string) {
-  console.log("first: ", item);
   if (item.includes("list")) {
-    console.log("first: ", item);
     emit("show-list");
+  }
+  if (item.includes("next")) {
+    currentPlayIndex.value++;
+    if (currentPlayIndex.value === playList.value.length) {
+      currentPlayIndex.value--;
+    }
+    console.log("first next", currentPlayIndex.value);
+    musicStore.playListToggleActions({}, type.value, currentPlayIndex.value);
+  }
+  if (item.includes("per")) {
+    currentPlayIndex.value--;
+    if (currentPlayIndex.value < 0) {
+      currentPlayIndex.value = playList.value.length;
+    }
+    console.log("first per", currentPlayIndex.value);
+    musicStore.playListToggleActions({}, type.value, currentPlayIndex.value);
   }
 }
 

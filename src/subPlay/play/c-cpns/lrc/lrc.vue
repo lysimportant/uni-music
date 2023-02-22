@@ -3,9 +3,9 @@
     <view class="show-arrow-time" v-show="touchMove">
       <text class="arrow icon-sanjiaoright"></text>
       <text class="arrow-line"></text>
-      <text class="time"
-        >{{ formatCurrentMusic(currentTime) }} {{ currentTIme_ }}</text
-      >
+      <text class="time">
+        {{ formatCurrentMusic(currentTime) }} {{ currentTIme_ }}
+      </text>
     </view>
     <scroll-view
       @touchend="debounce"
@@ -15,16 +15,14 @@
       class="my--scroll"
       scroll-with-animation
       @scroll="scroll"
+      v-if="isToggle"
     >
       <view class="one"></view>
-      <template v-for="(item, index) in lrcs" :key="index">
+      <template v-for="(item, index) in lrcs" :key="item.time">
         <view class="line">
-          <text
-            :class="{
-              active: currentIndex === index
-            }"
-            >{{ item.lrc }}</text
-          >
+          <text :class="currentIndex === index && 'active'">
+            {{ item.lrc }}
+          </text>
         </view>
       </template>
       <view class="last"></view>
@@ -33,13 +31,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 
 import { useMusicStore } from "@/store";
 
 import { formatMusicTime, useDebounce } from "@/utils";
-
 defineEmits(["show-lrc"]);
 
 const musicStore = useMusicStore();
@@ -47,9 +44,22 @@ const { lrcs, currentTime, currentIndex } = storeToRefs(musicStore);
 const formatCurrentMusic = computed(() => formatMusicTime);
 const touchMove = ref(false);
 
+const isToggle = ref(true);
+watch(
+  () => lrcs.value,
+  () => {
+    setTimeout(() => {
+      isToggle.value = false;
+      nextTick(() => {
+        isToggle.value = true;
+      });
+    }, 200);
+  }
+);
+
 const debounce = useDebounce(() => {
   touchMove.value = false;
-}, 2000);
+}, 5000);
 
 function getIndex() {
   for (let i = 0; i < lrcs.value.length - 1; i++) {
@@ -64,13 +74,13 @@ function getIndex() {
 const currentTIme_ = ref("");
 const scrollTop = computed(() => {
   getIndex();
-  return currentIndex.value * 40;
+  return currentIndex.value * 70;
 });
 
 function scroll(event: any) {
   for (let i = 0; i < lrcs.value.length - 1; i++) {
     if (lrcs.value[i].time > currentTime.value) {
-      const index = Math.floor(event.detail.scrollTop / 40);
+      const index = Math.floor(event.detail.scrollTop / 60);
       const time = lrcs.value[index]?.time;
       if (!time) break;
       currentTIme_.value = formatMusicTime(time);
@@ -91,6 +101,7 @@ function scroll(event: any) {
   margin-top: 35rpx;
   height: 60vh;
   /* #endif */
+  text-align: center;
 
   .show-arrow-time {
     position: absolute;
@@ -98,13 +109,13 @@ function scroll(event: any) {
     top: 50%;
     /* #endif */
     /* #ifndef MP-WEIXIN */
-    top: 45%;
+    top: 49%;
     /* #endif */
     left: 0;
     right: 0;
     z-index: 3;
     display: flex;
-    height: 40px;
+    height: 60px;
     justify-content: space-between;
     align-items: center;
     text-align: center;
@@ -156,8 +167,9 @@ function scroll(event: any) {
     .line {
       left: 0;
       width: 100%;
-      min-height: 40px;
+      height: 60px;
       color: #949494;
+      margin: 20rpx 0;
       display: flex;
       align-items: center;
       justify-content: center;

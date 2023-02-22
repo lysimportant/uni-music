@@ -55,7 +55,7 @@ function handlePlayClick(item: any) {
     return;
   }
 
-  musicStore.getMusicURLByIdAction(item.id, 1, 0, true);
+  musicStore.getMusicURLByIdAction(item.id, 0, 0, true);
   playList.value = songDetail.value.AllSongs;
 
   uni.navigateTo({
@@ -65,8 +65,8 @@ function handlePlayClick(item: any) {
 const detailCmp = computed(() => ({
   picUrl: songDetail.value.coverImgUrl,
   name: songDetail.value.name,
-  nickname: songDetail.value.creator.nickname,
-  avatarUrl: songDetail.value.creator.avatarUrl,
+  nickname: songDetail.value.creator?.nickname,
+  avatarUrl: songDetail.value.creator?.avatarUrl,
   categorys: songDetail.value.tags,
   desc: songDetail.value.description
 }));

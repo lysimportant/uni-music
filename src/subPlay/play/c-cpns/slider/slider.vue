@@ -22,7 +22,12 @@ import { storeToRefs } from "pinia";
 
 import { useMusicStore } from "@/store";
 
-import player, { seekMusicDuration, playMusic } from "@/utils/audio";
+import player, {
+  seekMusicDuration,
+  playMusic,
+  pauseMusic,
+  handleBackgroundAudio
+} from "@/utils/audio";
 import { formatMusicTime } from "@/utils";
 
 const musicStore = useMusicStore();
@@ -66,14 +71,44 @@ watch(
 
 // TODO: 考虑迁移到 APP监听
 player.onEnded((res) => {
+  if (currentStatus.value != 0) {
+    pauseMusic((falg: boolean) => {
+      musicStore.isPlayer = falg;
+      musicStore.currentTime = 0;
+      musicStore.duration = 0;
+      musicStore.lrcs = [];
+    });
+  }
+
+  console.log(musicStore.currentPlayIndex, currentStatus.value);
   if (currentStatus.value === 0) {
-    console.log("单曲播放");
+    musicStore.currentTime = 0;
+    musicStore.isPlayer = false;
     seekMusicDuration(0);
-    playMusic();
+    setTimeout(() => {
+      handleBackgroundAudio(
+        musicStore.name,
+        musicStore.authorName.join(" "),
+        musicStore.coverUrl
+      );
+      playMusic();
+    });
   } else if (currentStatus.value === 1) {
-    console.log("列表播放");
+    musicStore.currentPlayIndex += 1;
+    if (musicStore.currentPlayIndex >= musicStore.playList.length) {
+      musicStore.currentPlayIndex = 0;
+    }
+    return musicStore.playListToggleActions(
+      null,
+      musicStore.type,
+      musicStore.currentPlayIndex
+    );
   } else if (currentStatus.value === 2) {
-    console.log("随机播放");
+    let random = Math.ceil(Math.random() * musicStore.playList.length);
+    if (musicStore.currentPlayIndex === random) random++;
+    if (random < 0) random = 0;
+    musicStore.playListToggleActions(null, musicStore.type, random);
+    musicStore.currentPlayIndex = random;
   }
 });
 

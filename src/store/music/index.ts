@@ -12,7 +12,13 @@ import {
   getDjAllDetailService
 } from "@/service/dj";
 import { defineStore } from "pinia";
-import { loadMusic, playMusic, pauseMusic, formatLrc } from "@/utils";
+import {
+  loadMusic,
+  playMusic,
+  pauseMusic,
+  formatLrc,
+  handleBackgroundAudio
+} from "@/utils";
 import player from "@/utils/audio";
 import type IMusicStore from "./type";
 
@@ -106,24 +112,21 @@ const useMusicStore = defineStore("music", {
           this.duration = song.dt;
           this.id = id;
           this.name = song.name; // 歌曲名字
-          console.log("first songs: ", this.name, song.name, song);
           song.ar?.map((item: any) => {
             this.authorName = [];
             this.authorName = [...this.authorName, item.name];
           });
           // 歌手聊表.name
           this.coverUrl = song.al.picUrl; // 歌曲封面
-          // #ifndef H5
-          (player as UniApp.BackgroundAudioManager).title = this.name;
-          (player as UniApp.BackgroundAudioManager).singer =
-            this.authorName.join("/");
-          (player as UniApp.BackgroundAudioManager).coverImgUrl = this.coverUrl;
-          // #endif
+          handleBackgroundAudio(
+            this.name,
+            this.authorName.join("/"),
+            this.coverUrl
+          );
           // 获取歌词
-          getMusicLrcService(id).then((res) => {
-            const lrc = formatLrc(res.lrc.lyric);
-            this.lrcs = lrc;
-          });
+          const lrsRed = await getMusicLrcService(id);
+          const lrc = formatLrc(lrsRed.lrc.lyric);
+          this.lrcs = lrc;
         } else {
           this.type = 1;
           if (!this.playList[0]?.type) {
@@ -143,12 +146,12 @@ const useMusicStore = defineStore("music", {
 
           this.duration = res.program.duration; // 时长
 
-          // #ifndef H5
-          (player as UniApp.BackgroundAudioManager).title = this.name;
-          (player as UniApp.BackgroundAudioManager).singer =
-            this.authorName.join("/");
-          (player as UniApp.BackgroundAudioManager).coverImgUrl = this.coverUrl;
-          // #endif
+          handleBackgroundAudio(
+            this.name,
+            this.authorName.join("/"),
+            this.coverUrl
+          );
+
           const { data }: any = await getDjDetailService(
             this.currentDj.radio.id
           );
@@ -202,22 +205,21 @@ const useMusicStore = defineStore("music", {
       const res = await getMusicSongDetailService(id);
       this.songDetail = res.playlist;
 
-      const mids = res.playlist.trackIds.map((item: any) => item.id);
+      // const mids = res.playlist.trackIds.map((item: any) => item.id); // 数据多
+      const mids = res.playlist.tracks.map((item: any) => item.id); // 数据少
       getMusicDetailByIdService(mids).then(async (res) => {
         const urlIDS = res.songs.map((item: any) => item.id);
         const urlRes = await getMusicURLByIdService(urlIDS);
-
-        this.songDetail.AllSongs = res.songs.map(
-          (item: any, index: number) => ({
-            name: item.name, // 音乐的名字
-            id: item.id,
-            duration: item.dt,
-            authorName: item.ar.map((item: any) => item.name),
-            coverUrl: item.al.picUrl,
-            fee: item.fee,
-            url: urlRes.data[index].url
-          })
-        );
+        this.songDetail.AllSongs = res.songs.map((item: any) => ({
+          name: item.name, // 音乐的名字
+          id: item.id,
+          duration: item.dt,
+          authorName: item.ar.map((item: any) => item.name),
+          coverUrl: item.al.picUrl,
+          fee: item.fee,
+          type: this.type,
+          url: urlRes.data.find((itemy: any) => itemy.id === item.id).url
+        }));
         console.log(this.songDetail.AllSongs);
       });
     },
@@ -226,13 +228,13 @@ const useMusicStore = defineStore("music", {
       const res = await getDjAllDetailService(id);
       const urlIDS = res.programs.map((item: any) => item.mainTrackId);
       const urlRes = await getMusicURLByIdService(urlIDS);
-      this.playList = res.programs;
       this.playList = res.programs.map((item: any, index: number) => ({
         id: item.id,
         djID: item.mainTrackId,
         name: item.name,
         coverUrl: item.coverUrl,
         desc: item.desc,
+        type: this.type,
         scheduledPublishTime: item.scheduledPublishTime,
         listenerCount: item.listenerCount,
         duration: item.duration,
@@ -242,52 +244,64 @@ const useMusicStore = defineStore("music", {
 
       const detail = await getDjDetailService(res.programs[0].radio.id);
       this.DJDetail = detail.data;
-
-      console.log("p la ylist: ", this.playList, urlIDS, urlRes);
     },
-    async playListToggleActions(payload: any, tpye = 0) {
+    // 切换   payload 对象  type 播放模式 0歌1播客  index 切换索引
+    async playListToggleActions(payload: any, type = 0, index?: number) {
       pauseMusic((falg: boolean) => {
         this.isPlayer = falg;
         this.currentTime = 0;
         this.duration = 0;
+        this.lrcs = [];
       });
-      this.type = tpye;
-      const _music = this.playList.findIndex(
-        (item: any) => item.id === payload.id
-      );
-      console.log("找到了这个=========", _music, this.playList[_music]);
-      if (_music >= 0) {
-        const { type, name, id, authorName, coverUrl, duration, url } =
-          this.playList[_music];
+
+      if (index == undefined) {
+        console.log("first 播放到下一个: ", index);
+        this.type = type;
+        const _music = this.playList.findIndex(
+          (item: any) => item.id === payload.id
+        );
+        if (_music >= 0) {
+          const { name, id, authorName, coverUrl, duration, url } =
+            this.playList[_music];
+          this.name = name;
+          this.id = id;
+          this.authorName = authorName;
+          this.duration = duration;
+          this.coverUrl = coverUrl;
+          this.currentPlayIndex = _music;
+          this.url = url;
+          if (!type) {
+            const res = await getMusicLrcService(id);
+            const lrc = formatLrc(res.lrc.lyric);
+            this.lrcs = lrc;
+          }
+        }
+      } else {
+        const { name, id, authorName, coverUrl, duration, url } =
+          this.playList[index];
         this.name = name;
         this.id = id;
         this.authorName = authorName;
         this.duration = duration;
         this.coverUrl = coverUrl;
-        this.currentPlayIndex = _music;
-        !type &&
-          getMusicLrcService(id).then((res) => {
-            const lrc = formatLrc(res.lrc.lyric);
-            console.log("first 查询歌词: ", lrc);
-            this.lrcs = lrc;
-          });
-
-        setTimeout(() => {
-          console.log(
-            "异步播放",
-            type,
-            name,
-            id,
-            authorName,
-            coverUrl,
-            duration,
-            url
-          );
-          loadMusic(url, (flag: boolean) => {
-            this.isPlayer = flag;
-          });
-        }, 50);
+        this.currentPlayIndex = index;
+        this.url = url;
+        if (!type) {
+          const res = await getMusicLrcService(id);
+          const lrc = formatLrc(res.lrc.lyric);
+          this.lrcs = lrc;
+        }
       }
+      handleBackgroundAudio(
+        this.name,
+        this.authorName.join("/"),
+        this.coverUrl
+      );
+      setTimeout(() => {
+        loadMusic(this.url, (flag: boolean) => {
+          this.isPlayer = flag;
+        });
+      }, 300);
     }
   }
 });

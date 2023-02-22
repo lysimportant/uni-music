@@ -10,12 +10,10 @@ player = uni.getBackgroundAudioManager(); // UniApp.BackgroundAudioManager
  * @param fn 回调操作
  */
 export function loadMusic(url: any, fn?: (flag: boolean) => void) {
-  console.log("first url: ", url);
   player.src = url;
   player.play();
   player.onCanplay(() => {
     fn?.(true);
-    console.log("音乐可以播放了");
   });
 }
 
@@ -67,3 +65,14 @@ export function seekMusicDuration(time: number) {
 }
 
 export default player;
+export function handleBackgroundAudio(
+  name: string,
+  authorName: string,
+  coverUrl: string
+) {
+  // #ifndef H5
+  (player as UniApp.BackgroundAudioManager).title = name;
+  (player as UniApp.BackgroundAudioManager).singer = authorName;
+  (player as UniApp.BackgroundAudioManager).coverImgUrl = coverUrl;
+  // #endif
+}

@@ -13,32 +13,44 @@
         <text class="title_h1">当前播放</text>({{ playList.length }})
       </view>
       <view class="status">
-        <view>
+        <view @click="currentStatus += 1">
           <text :class="[playStatus[currentStatus].model]"> </text>
           <text> {{ playStatus[currentStatus].msg }}</text>
         </view>
-        <view>
+        <view @click="handleClearMusicListClick">
           <text class="icon-del"></text>
         </view>
       </view>
       <view class="container">
-        <template v-for="(item, index) of playList" :key="item.id">
-          <view
-            class="container__item"
-            @click.stop="handlePlayClick(item)"
-            :class="{ active: currentPlayIndex === index }"
-          >
-            <view class="index">{{ index }}</view>
-            <view class="name over-ellipsis">
-              <text class="name-song over-ellipsis"> {{ item.name }}-</text>
-              <text class="name-author over-ellipsis">{{
-                item.authorName.join(" ")
-              }}</text>
+        <scroll-view
+          scroll-y
+          scroll-with-animation
+          class="scroll_y"
+          :scrollTop="musicStore.currentPlayIndex * 40"
+          v-if="editList"
+        >
+          <template v-for="(item, index) of playList" :key="item.id">
+            <view
+              class="container__item"
+              @click.stop="handlePlayClick(item)"
+              :class="[{ active: currentPlayIndex === index }]"
+            >
+              <view class="index">{{ index + 1 }}</view>
+              <view class="name over-ellipsis">
+                <text class="name-song over-ellipsis"> {{ item.name }}-</text>
+                <text class="name-author over-ellipsis">{{
+                  item.authorName.join(" ")
+                }}</text>
+              </view>
+              <view class="dt">{{
+                formatMusicTime(item.duration / 1000)
+              }}</view>
+              <view class="operate" @click.stop="handleDeleteClick(item, index)"
+                ><text class="icon-del"></text
+              ></view>
             </view>
-            <view class="dt">{{ formatMusicTime(item.duration / 1000) }}</view>
-            <view class="operate"><text class="icon-del"></text></view>
-          </view>
-        </template>
+          </template>
+        </scroll-view>
       </view>
     </view>
   </view>
@@ -49,25 +61,61 @@ import { useMusicStore } from "@/store";
 import { storeToRefs } from "pinia";
 
 import { formatMusicTime, pauseMusic } from "@/utils";
-import { nextTick, onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 const emit = defineEmits(["update:modelValue"]);
 const props = defineProps<{
   modelValue: boolean;
 }>();
 
 const musicStore = useMusicStore();
-onMounted(() => {
-  musicStore.currentPlayIndex = musicStore.playList.findIndex(
-    (item: any) => item.id === musicStore.id
-  );
-});
+
 const showMain = ref(false);
 const activeMain = ref(false);
+const editList = ref(true);
+function handleDeleteClick(item: any, index: number) {
+  editList.value = false;
+  setTimeout(() => {
+    editList.value = true;
+  });
+  console.log("first 删除当前歌曲: ", item);
+  if (musicStore.currentPlayIndex === index) {
+    musicStore.playList.splice(index, 1);
+    musicStore.playListToggleActions(
+      null,
+      type.value,
+      currentPlayIndex.value++
+    );
+  } else {
+    musicStore.playList.splice(index, 1);
+    musicStore.currentPlayIndex = musicStore.playList.findIndex(
+      (item: any) => item.name === musicStore.name
+    );
+  }
+}
+
+function handleClearMusicListClick() {
+  editList.value = false;
+  setTimeout(() => {
+    editList.value = true;
+  });
+  pauseMusic(() => {
+    musicStore.$reset();
+    emit("update:modelValue", !props.modelValue); // 只更新外部的值，内部由watch去处理
+    uni.showToast({
+      mask: true,
+      title: "已为你清除所有的歌单~ 返回首页"
+    });
+    uni.switchTab({ url: "/pages/index/index" });
+  });
+}
+
 // 异步修改样式
 watch(
   () => props.modelValue,
   (newVal) => {
-    console.log("watch=>", newVal);
+    musicStore.currentPlayIndex = musicStore.playList.findIndex(
+      (item: any) => item.id === musicStore.id
+    );
     if (newVal) {
       showMain.value = true;
       setTimeout(() => {
@@ -83,15 +131,27 @@ watch(
   }
 );
 
-const { playList, currentPlayIndex, currentStatus, isPlayer, currentTime } =
-  storeToRefs(musicStore);
+const {
+  playList,
+  type,
+  currentPlayIndex,
+  currentStatus,
+  isPlayer,
+  currentTime
+} = storeToRefs(musicStore);
 function handlePlayClick(item: any) {
+  editList.value = false;
+  setTimeout(() => {
+    editList.value = true;
+  });
   pauseMusic((flag: boolean) => {
     isPlayer.value = flag;
     currentTime.value = 0;
-    console.log("first  音乐暂停");
   });
-  musicStore.playListToggleActions(item, 1);
+  musicStore.currentPlayIndex = musicStore.playList.findIndex(
+    (item: any) => item.id === musicStore.id
+  );
+  musicStore.playListToggleActions(item, type.value);
 }
 
 function handleBgClick() {
@@ -164,8 +224,9 @@ const playStatus = [
       }
     }
     .container {
-      max-height: 400px;
-      overflow-y: auto;
+      .scroll_y {
+        max-height: 400px;
+      }
       &__item {
         // display: flex;
         // justify-content: space-between;
