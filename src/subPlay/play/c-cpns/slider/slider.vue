@@ -38,7 +38,6 @@ const { isPlayer, currentStatus, currentTime, duration } =
 const down = ref(false); // 是否按下
 // 放开进度条
 function sliderChange(val: any) {
-  console.log(val);
   currentTime.value = val.detail.value;
   seekMusicDuration(val.detail.value);
   down.value = false;
@@ -80,7 +79,6 @@ player.onEnded((res) => {
     });
   }
 
-  console.log(musicStore.currentPlayIndex, currentStatus.value);
   if (currentStatus.value === 0) {
     musicStore.currentTime = 0;
     musicStore.isPlayer = false;

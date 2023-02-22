@@ -77,7 +77,13 @@ function handleDeleteClick(item: any, index: number) {
   setTimeout(() => {
     editList.value = true;
   });
-  console.log("first 删除当前歌曲: ", item);
+
+  if (musicStore.playList.length === 1) {
+    musicStore.playList.splice(index, 1);
+    emit("update:modelValue", !props.modelValue); // 只更新外部的值，内部由watch去处理\
+    return;
+  }
+
   if (musicStore.currentPlayIndex === index) {
     musicStore.playList.splice(index, 1);
     musicStore.playListToggleActions(
@@ -228,9 +234,9 @@ const playStatus = [
         max-height: 400px;
       }
       &__item {
-        // display: flex;
+        display: flex;
         // justify-content: space-between;
-        // align-items: center;
+        align-items: center;
 
         padding: 20rpx 0;
         & > view {

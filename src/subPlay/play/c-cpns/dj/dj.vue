@@ -96,7 +96,6 @@ function handleJumpClick() {
 }
 
 function handleRecommendClick(item: any) {
-  console.log("first: ", item);
   uni.navigateTo({
     url: `/subDetail/dj-detail/dj-detail?cid=${item.id}`
   });

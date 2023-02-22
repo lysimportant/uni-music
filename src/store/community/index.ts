@@ -9,9 +9,8 @@ const communityStore = defineStore("community", {
   }),
   actions: {
     getCommunityData() {
-      getCommunityRecommendVideos().then((res) => {
-        console.log(res);
-      });
+      // getCommunityRecommendVideos().then((res) => {
+      // });
     }
   }
 });

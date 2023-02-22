@@ -55,7 +55,6 @@ function handleOperationClick(item: string) {
     if (currentPlayIndex.value === playList.value.length) {
       currentPlayIndex.value--;
     }
-    console.log("first next", currentPlayIndex.value);
     musicStore.playListToggleActions({}, type.value, currentPlayIndex.value);
   }
   if (item.includes("per")) {
@@ -63,7 +62,6 @@ function handleOperationClick(item: string) {
     if (currentPlayIndex.value < 0) {
       currentPlayIndex.value = playList.value.length;
     }
-    console.log("first per", currentPlayIndex.value);
     musicStore.playListToggleActions({}, type.value, currentPlayIndex.value);
   }
 }

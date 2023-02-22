@@ -53,7 +53,6 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { onLaunch } from "@dcloudio/uni-app";
 import { storeToRefs } from "pinia";
 
 import { useMusicStore } from "@/store";
@@ -74,12 +73,7 @@ const { type, lrcs, name, authorName, coverUrl } = storeToRefs(musicStore);
 
 const isShow = ref(false);
 
-function change(event: any) {
-  console.log("first: ", event);
-}
-onLaunch((e) => {
-  console.log(e);
-});
+function change(event: any) {}
 
 const showLrc = ref(false);
 function handleToggleImgLrc(falg: boolean) {

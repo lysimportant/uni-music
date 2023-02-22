@@ -205,8 +205,8 @@ const useMusicStore = defineStore("music", {
       const res = await getMusicSongDetailService(id);
       this.songDetail = res.playlist;
 
-      // const mids = res.playlist.trackIds.map((item: any) => item.id); // 数据多
-      const mids = res.playlist.tracks.map((item: any) => item.id); // 数据少
+      const mids = res.playlist.trackIds.map((item: any) => item.id); // 数据多
+      // const mids = res.playlist.tracks.map((item: any) => item.id); // 数据少
       getMusicDetailByIdService(mids).then(async (res) => {
         const urlIDS = res.songs.map((item: any) => item.id);
         const urlRes = await getMusicURLByIdService(urlIDS);
