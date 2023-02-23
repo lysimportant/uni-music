@@ -59,52 +59,52 @@ export default indexStore;
 const urls = [
   {
     iconUrl:
-      "http://test.lianghj.top/uni-music/uni-music-index-icon-png/discover.png?x-oss-process=style/mystyle",
+      "https://lhj-blog-service.oss-cn-guangzhou.aliyuncs.com/uni-music/uni-music-index-icon-png/discover.png?x-oss-process=style/mystyle",
     path: ""
   },
   {
     iconUrl:
-      "http://test.lianghj.top/uni-music/uni-music-index-icon-png/fm.jpg.png?x-oss-process=style/mystyle",
+      "https://lhj-blog-service.oss-cn-guangzhou.aliyuncs.com/uni-music/uni-music-index-icon-png/fm.jpg.png?x-oss-process=style/mystyle",
     path: ""
   },
   {
     iconUrl:
-      "http://test.lianghj.top/uni-music/uni-music-index-icon-png/songs.jpg.png?x-oss-process=style/mystyle",
+      "https://lhj-blog-service.oss-cn-guangzhou.aliyuncs.com/uni-music/uni-music-index-icon-png/songs.jpg.png?x-oss-process=style/mystyle",
     path: ""
   },
   {
     iconUrl:
-      "http://test.lianghj.top/uni-music/uni-music-index-icon-png/pxb.jpg.png?x-oss-process=style/mystyle",
+      "https://lhj-blog-service.oss-cn-guangzhou.aliyuncs.com/uni-music/uni-music-index-icon-png/pxb.jpg.png?x-oss-process=style/mystyle",
     path: ""
   },
   {
     iconUrl:
-      "http://test.lianghj.top/uni-music/uni-music-index-icon-png/%E7%9B%B4%E6%92%AD.jpg.png?x-oss-process=style/mystyle",
+      "https://lhj-blog-service.oss-cn-guangzhou.aliyuncs.com/uni-music/uni-music-index-icon-png/%E7%9B%B4%E6%92%AD.jpg.png?x-oss-process=style/mystyle",
     path: ""
   },
   {
     iconUrl:
-      "http://test.lianghj.top/uni-music/uni-music-index-icon-png/%E6%95%B0%E5%AD%97.jpg.png?x-oss-process=style/mystyle",
+      "https://lhj-blog-service.oss-cn-guangzhou.aliyuncs.com/uni-music/uni-music-index-icon-png/%E6%95%B0%E5%AD%97.jpg.png?x-oss-process=style/mystyle",
     path: ""
   },
   {
     iconUrl:
-      "http://test.lianghj.top/uni-music/uni-music-index-icon-png/%E6%9C%89%E5%A3%B0%E8%AF%BB%E4%B9%A6.jpg.png?x-oss-process=style/mystyle",
+      "https://lhj-blog-service.oss-cn-guangzhou.aliyuncs.com/uni-music/uni-music-index-icon-png/%E6%9C%89%E5%A3%B0%E8%AF%BB%E4%B9%A6.jpg.png?x-oss-process=style/mystyle",
     path: ""
   },
   {
     iconUrl:
-      "http://test.lianghj.top/uni-music/uni-music-index-icon-png/%E5%85%B3%E6%B3%A8%E6%96%B0%E6%AD%8C.jpg.png?x-oss-process=style/mystyle",
+      "https://lhj-blog-service.oss-cn-guangzhou.aliyuncs.com/uni-music/uni-music-index-icon-png/%E5%85%B3%E6%B3%A8%E6%96%B0%E6%AD%8C.jpg.png?x-oss-process=style/mystyle",
     path: ""
   },
   {
     iconUrl:
-      "http://test.lianghj.top/uni-music/uni-music-index-icon-png/%E6%94%B6%E8%97%8F.jpg.png?x-oss-process=style/mystyle",
+      "https://lhj-blog-service.oss-cn-guangzhou.aliyuncs.com/uni-music/uni-music-index-icon-png/%E6%94%B6%E8%97%8F.jpg.png?x-oss-process=style/mystyle",
     path: ""
   },
   {
     iconUrl:
-      "http://test.lianghj.top/uni-music/uni-music-index-icon-png/game.jpg.png?x-oss-process=style/mystyle",
+      "https://lhj-blog-service.oss-cn-guangzhou.aliyuncs.com/uni-music/uni-music-index-icon-png/game.jpg.png?x-oss-process=style/mystyle",
     path: ""
   }
 ];
