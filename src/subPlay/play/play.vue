@@ -34,7 +34,7 @@
       </template>
 
       <view class="operation">
-        <Interaction />
+        <!-- <Interaction /> -->
         <Slider />
         <Controller @show-list="isShow = !isShow" />
       </view>

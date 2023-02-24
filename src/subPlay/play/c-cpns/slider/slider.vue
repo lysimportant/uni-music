@@ -54,7 +54,7 @@ function timeFn() {
 }
 watch(
   () => isPlayer.value,
-  (n) => {
+  (n: any) => {
     if (n) {
       saveTimer = setInterval(timeFn, 900);
     } else {
@@ -105,6 +105,8 @@ player.onEnded((res) => {
     let random = Math.ceil(Math.random() * musicStore.playList.length);
     if (musicStore.currentPlayIndex === random) random++;
     if (random < 0) random = 0;
+    if (random >= musicStore.playList.length) random--;
+    console.log("first: ", random);
     musicStore.playListToggleActions(null, musicStore.type, random);
     musicStore.currentPlayIndex = random;
   }
