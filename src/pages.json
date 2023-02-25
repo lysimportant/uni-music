@@ -69,12 +69,31 @@
           }
         }
       ]
+    },
+    {
+      "root": "subSearch",
+      "pages": [
+        {
+          "path": "search/search",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "content/content",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        }
+      ]
     }
   ],
   "preloadRule": {
     "pages/index/index": {
       "network": "all",
-      "packages": ["subPlay", "subDetail"]
+      "packages": ["subPlay", "subDetail", "subSearch"]
     }
   },
   "requiredBackgroundModes": ["audio", "location"],

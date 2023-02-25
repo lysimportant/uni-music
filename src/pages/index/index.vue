@@ -1,7 +1,8 @@
 <template>
   <view class="content">
     <view :class="{ bg: isTop }"></view>
-    <nav-bar :top="!isTop" :tip="'推荐的数据'"> </nav-bar>
+    <nav-bar @center="handleSearchClick" :top="!isTop" :tip="searchKey">
+    </nav-bar>
     <my-swiper
       height="350px"
       indicator="bottomLeft"
@@ -25,7 +26,7 @@ import { storeToRefs } from "pinia";
 import { onPageScroll } from "@dcloudio/uni-app";
 
 import { useIndexStore, useCommonStore } from "@/store";
-
+import { useNavigate } from "@/utils";
 import IndexDiscover from "./c-cpns/index-discover.vue";
 import IndexRecommendSongs from "./c-cpns/index-recommend-songs.vue";
 import IndexNewsongs from "./c-cpns/index-newsongs.vue";
@@ -35,7 +36,7 @@ const isShow = ref(false);
 const indexStore = useIndexStore();
 const commonStore = useCommonStore();
 indexStore.getIndexDataAction();
-const { banners, discoverIcons, songs, newSongs, djList } =
+const { banners, discoverIcons, songs, newSongs, djList, searchKey } =
   storeToRefs(indexStore);
 const isTop = ref(true);
 onPageScroll(({ scrollTop }) => {
@@ -45,6 +46,10 @@ onPageScroll(({ scrollTop }) => {
     isTop.value && (isTop.value = false);
   }
 });
+
+function handleSearchClick() {
+  useNavigate("page", "/subSearch/search/search", { key: searchKey.value });
+}
 
 const barHeight = computed(() => {
   let height = 0;

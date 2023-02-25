@@ -7,12 +7,14 @@ import {
 } from "@/service/index/index";
 
 import { getIndexHotDjService } from "@/service/dj";
+import { getSearchDefaultService } from "@/service/search";
 interface IIndexState {
   banners: any[]; // 轮播图
   discoverIcons: any[]; // 推荐图标
   songs: any[]; // 推荐歌单
   newSongs: any[]; // 推荐新歌
   djList: any[]; // 热门播客
+  searchKey: string;
 }
 
 const indexStore = defineStore("index", {
@@ -21,7 +23,8 @@ const indexStore = defineStore("index", {
     discoverIcons: [],
     songs: [],
     newSongs: [],
-    djList: []
+    djList: [],
+    searchKey: ""
   }),
   actions: {
     getIndexDataAction(): void {
@@ -49,6 +52,10 @@ const indexStore = defineStore("index", {
       // djs
       getIndexHotDjService().then((res) => {
         this.djList = res.toplist.map((item: any) => item.program);
+      });
+      // 搜索
+      getSearchDefaultService().then((res) => {
+        this.searchKey = res.data.realkeyword;
       });
     }
   }

@@ -5,12 +5,12 @@
     <!-- #endif -->
 
     <view class="content">
-      <view class="left">
+      <view class="left" @click="handleLeftClick">
         <slot name="left">
           <view class="iconfont icon-menu"></view>
         </slot>
       </view>
-      <view class="center">
+      <view class="center" @click="handleCenterClick">
         <slot name="center">
           <view class="iconfont icon-sousuo my-search"></view
           ><input
@@ -23,7 +23,7 @@
           />
         </slot>
       </view>
-      <view class="right">
+      <view class="right" @click="handleRightClick">
         <slot name="right">
           <view class="iconfont icon-yuyin"></view>
         </slot>
@@ -34,6 +34,8 @@
 
 <script lang="ts" setup>
 import { useCommonStore } from "@/store";
+
+const emit = defineEmits(["left", "center", "right"]);
 withDefaults(
   defineProps<{
     tip?: string;
@@ -47,6 +49,16 @@ withDefaults(
   }
 );
 const commonStore = useCommonStore();
+
+function handleLeftClick() {
+  emit("left");
+}
+function handleCenterClick() {
+  emit("center");
+}
+function handleRightClick() {
+  emit("right");
+}
 </script>
 
 <style lang="scss" scoped>
