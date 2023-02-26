@@ -8,16 +8,14 @@
           class="l-tabs__item"
           @click="tabsClick(index, list)"
           :style="{ width: itemWidth }"
-          :class="{ 'l-tabs__item-active': currentTab === index }"
+          :class="{ 'l-tabs__item-active': modelValue === index }"
           >{{ item.name }}</view
         >
       </template>
     </view>
     <view class="l-tabs__content">
       <template v-for="(item, index) in list" :key="item.name">
-        <slot v-if="currentTab === index" :name="item.slotName"
-          >{{ item.name }} 插槽默认内容</slot
-        >
+        <slot v-if="modelValue === index" :name="item.slotName">{{ item.name }} 插槽默认内容</slot>
       </template>
     </view>
   </view>
@@ -25,10 +23,10 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, computed } from "vue";
-
+const emit = defineEmits(["update:modelValue", "change"]);
 const props = withDefaults(
   defineProps<{
-    list: { name: string; slotName: string }[];
+    list: { name: string; slotName: string; type?: number }[];
     itemWidth?: string;
     defaultColor?: string;
     activeColor?: string;
@@ -36,6 +34,8 @@ const props = withDefaults(
     height?: string;
     blockOffset?: string;
     blockHeight?: string;
+    opacity?: number;
+    modelValue?: number;
   }>(),
   {
     defaultColor: "#949494",
@@ -44,21 +44,23 @@ const props = withDefaults(
     blockColor: "#ffffff",
     height: "44px",
     blockOffset: "-10px",
-    blockHeight: "5px"
+    blockHeight: "5px",
+    opacity: 1,
+    modelValue: 0
   }
 );
 
-const currentTab = ref(0);
 const tabBlockLeft = ref();
 function tabsClick(index: number, arr: any[]) {
-  currentTab.value = index;
+  emit("update:modelValue", index);
+  emit("change", arr[index]);
   const width = Number(props.itemWidth.replace("px", ""));
   tabBlockLeft.value = index * width + width / arr.length + "px";
 }
 onMounted(() => {
-  tabsClick(currentTab.value, props.list);
+  tabsClick(props.modelValue, props.list);
 });
-const blockOffsetCmp = ref(`translateX(${props.blockOffset})`);
+const blockOffsetCmp = ref(`translate(${props.blockOffset})`);
 </script>
 
 <style scoped lang="scss">
@@ -85,9 +87,10 @@ const blockOffsetCmp = ref(`translateX(${props.blockOffset})`);
       bottom: 0;
       padding: 0 10px;
       height: v-bind("$props.blockHeight");
-      background-color: v-bind("$props.blockColor");
+      background: v-bind("$props.blockColor");
       transform: v-bind("blockOffsetCmp");
       border-radius: 10rpx;
+      opacity: v-bind("$props.opacity");
     }
   }
   .l-tabs__content {

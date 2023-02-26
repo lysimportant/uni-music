@@ -2,6 +2,7 @@
   <view class="dj-tba">
     <l-tabs
       :list="list"
+      v-model="currentTab"
       default-color="#949494"
       active-color="#fff"
       block-color="#fff"
@@ -31,10 +32,7 @@
             <text class="name">{{ name }}</text>
           </view>
           <view class="time">
-            <text
-              >发布时间:
-              {{ formatDate(currentDj.createTime, "YYYY-MM-DD") }}</text
-            >
+            <text>发布时间: {{ formatDate(currentDj.createTime, "YYYY-MM-DD") }}</text>
             <text>播放量: {{ formatCount(currentDj.listenerCount) }}</text>
           </view>
           <view class="desc">
@@ -46,16 +44,12 @@
       <template #reommend>
         <view class="recommend">
           <scroll-view scroll-y class="scroll-Y">
-            <template
-              v-for="(item, index) in currentDj.recommend"
-              :key="item.id"
-            >
+            <template v-for="(item, index) in currentDj.recommend" :key="item.id">
               <flex-cpn
                 margin="10px 0"
                 @click="handleRecommendClick(item)"
                 :style="{
-                  paddingBottom:
-                    index === currentDj.recommend.length - 1 ? '100px' : '0'
+                  paddingBottom: index === currentDj.recommend.length - 1 ? '100px' : '0'
                 }"
               >
                 <template #left>
@@ -85,8 +79,9 @@
 import { storeToRefs } from "pinia";
 import { useMusicStore } from "@/store";
 import { formatCount, formatDate } from "@/utils";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 const musicStore = useMusicStore();
+const currentTab = ref(0);
 const { currentDj, name } = storeToRefs(musicStore);
 const countCmp = computed(() => formatCount);
 function handleJumpClick() {
@@ -117,14 +112,8 @@ const list = [
 .dj-tba {
   position: relative;
   padding: 0 10px;
-  /* #ifndef MP */
-  top: 15%;
-  /* #endif */
-  /* #ifdef MP */
-  top: 25%;
-  /* #endif */
   height: 200px;
-
+  margin-top: 20px;
   .detail {
     // text-align: center;
     padding: 12px;

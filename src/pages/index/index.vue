@@ -1,7 +1,7 @@
 <template>
   <view class="content">
     <view :class="{ bg: isTop }"></view>
-    <nav-bar @center="handleSearchClick" :top="!isTop" :tip="searchKey">
+    <nav-bar @center="handleSearchClick" disabled :top="!isTop" :tip="searchKey">
     </nav-bar>
     <my-swiper
       height="350px"

@@ -7,13 +7,14 @@
     <view class="content">
       <view class="left" @click="handleLeftClick">
         <slot name="left">
-          <view class="iconfont icon-menu"></view>
+          <view class="iconfont icon-menu" ></view>
         </slot>
       </view>
       <view class="center" @click="handleCenterClick">
         <slot name="center">
           <view class="iconfont icon-sousuo my-search"></view
           ><input
+            :disabled="disabled"
             :style="{
               background: top ? '#fff' : '',
               border: !top ? '1px solid #ccc' : '0'
@@ -41,6 +42,7 @@ withDefaults(
     tip?: string;
     top?: boolean;
     contentHeight?: string;
+    disabled?: boolean
   }>(),
   {
     tip: "等待操作",

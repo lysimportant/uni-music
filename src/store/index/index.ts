@@ -47,7 +47,12 @@ const indexStore = defineStore("index", {
       });
       // newsongs
       getIndexNewSongs().then((res) => {
-        this.newSongs = res.result;
+        this.newSongs = res.result.map((item: any) => ({
+          id: item.id,
+          picUrl: item.picUrl,
+          name: item.name,
+          artists: item.song.artists
+        }));
       });
       // djs
       getIndexHotDjService().then((res) => {

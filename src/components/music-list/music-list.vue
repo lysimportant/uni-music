@@ -5,13 +5,8 @@
       :class="activeMain && 'music-list-bg_active'"
       @click.stop="handleBgClick"
     />
-    <view
-      class="music-list-content"
-      :class="activeMain && 'music-list-content_active'"
-    >
-      <view class="header">
-        <text class="title_h1">当前播放</text>({{ playList.length }})
-      </view>
+    <view class="music-list-content" :class="activeMain && 'music-list-content_active'">
+      <view class="header"> <text class="title_h1">当前播放</text>({{ playList.length }}) </view>
       <view class="status">
         <view @click="currentStatus += 1">
           <text :class="[playStatus[currentStatus].model]"> </text>
@@ -38,13 +33,9 @@
               <view class="index">{{ index + 1 }}</view>
               <view class="name over-ellipsis">
                 <text class="name-song over-ellipsis"> {{ item.name }}-</text>
-                <text class="name-author over-ellipsis">{{
-                  item.authorName.join(" ")
-                }}</text>
+                <text class="name-author over-ellipsis">{{ item.authorName.join(" ") }}</text>
               </view>
-              <view class="dt">{{
-                formatMusicTime(item.duration / 1000)
-              }}</view>
+              <view class="dt">{{ formatMusicTime(item.duration / 1000) }}</view>
               <view class="operate" @click.stop="handleDeleteClick(item, index)"
                 ><text class="icon-del"></text
               ></view>
@@ -60,7 +51,7 @@
 import { useMusicStore } from "@/store";
 import { storeToRefs } from "pinia";
 
-import { formatMusicTime, pauseMusic } from "@/utils";
+import { formatMusicTime, pauseMusic, useNavigate } from "@/utils";
 import { ref, watch } from "vue";
 const emit = defineEmits(["update:modelValue"]);
 const props = defineProps<{
@@ -86,11 +77,7 @@ function handleDeleteClick(item: any, index: number) {
 
   if (musicStore.currentPlayIndex === index) {
     musicStore.playList.splice(index, 1);
-    musicStore.playListToggleActions(
-      null,
-      type.value,
-      currentPlayIndex.value++
-    );
+    musicStore.playListToggleActions(null, type.value, currentPlayIndex.value++);
   } else {
     musicStore.playList.splice(index, 1);
     musicStore.currentPlayIndex = musicStore.playList.findIndex(
@@ -107,11 +94,11 @@ function handleClearMusicListClick() {
   pauseMusic(() => {
     musicStore.$reset();
     emit("update:modelValue", !props.modelValue); // 只更新外部的值，内部由watch去处理
+    useNavigate("back", 1);
     uni.showToast({
       mask: true,
-      title: "已为你清除所有的歌单~ 返回首页"
+      title: "已为你清除所有的歌单~ "
     });
-    uni.switchTab({ url: "/pages/index/index" });
   });
 }
 
@@ -137,14 +124,8 @@ watch(
   }
 );
 
-const {
-  playList,
-  type,
-  currentPlayIndex,
-  currentStatus,
-  isPlayer,
-  currentTime
-} = storeToRefs(musicStore);
+const { playList, type, currentPlayIndex, currentStatus, isPlayer, currentTime } =
+  storeToRefs(musicStore);
 function handlePlayClick(item: any) {
   editList.value = false;
   setTimeout(() => {

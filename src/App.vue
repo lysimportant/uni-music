@@ -4,6 +4,7 @@
 
 :root {
   --default-color: #949494;
+  --primary-color: #517dad;
 }
 
 .top {
