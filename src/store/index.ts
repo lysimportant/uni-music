@@ -8,7 +8,8 @@ import useIndexStore from "./index/index";
 import useCommunityStore from "./community";
 import useMusicStore from "./music";
 import useCommonStore from "./common";
-import useSearchStore from "@/store/search";
+import useSearchStore from "./search";
+import useDJStore from "./dj";
 
 // const res = import.meta.glob("./**/*.ts", {
 //   eager: true
@@ -29,5 +30,6 @@ export {
   useCommunityStore,
   useIndexStore,
   useCommonStore,
-  useSearchStore
+  useSearchStore,
+  useDJStore
 };

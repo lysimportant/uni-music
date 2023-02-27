@@ -42,3 +42,19 @@ export function getDjAllDetailService(id: any) {
 export function getSearchDJListService() {
   return hjRequest.get({ url: `/dj/toplist?limit=20` });
 }
+
+/**
+ *
+ * @returns 返回播客的歌单ID
+ */
+export function getDJTagListService() {
+  return hjRequest.get({ url: "/dj/category/recommend" });
+}
+/**
+ * 根据  /dj/category/recommend 返回的ID
+ * @param id 分类的ID
+ * @returns 返回改分类的热门
+ */
+export function getRadioHotService(id: number) {
+  return hjRequest.get({ url: `/dj/radio/hot?cateId=${id}` });
+}

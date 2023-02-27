@@ -16,6 +16,7 @@
     <view class="l-tabs__content">
       <template v-for="(item, index) in list" :key="item.name">
         <slot v-if="modelValue === index" :name="item.slotName">{{ item.name }} 插槽默认内容</slot>
+        <slot></slot>
       </template>
     </view>
   </view>

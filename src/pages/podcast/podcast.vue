@@ -1,9 +1,16 @@
 <template>
-  <view> </view>
+  <view>---------- </view>
 </template>
 
-<script>
+<script setup lang="ts">
+import { useDJStore } from "@/store";
+const DJStore = useDJStore();
+
+DJStore.getDJRecommendAction();
+</script>
+<script lang="ts">
 export default {
+  name: "podcast",
   data() {
     return {};
   }

@@ -7,7 +7,7 @@
       active-color="#fff"
       block-color="#fff"
     >
-      {{ currentDj.radio }}
+      <text></text>
       <template #detail>
         <view class="detail" @click="handleJumpClick">
           <flex-cpn height="60px">
@@ -109,7 +109,7 @@ const list = [
   position: relative;
   padding: 0 10px;
   height: 200px;
-  margin-top: 20px;
+  margin-top: 35px;
   .detail {
     // text-align: center;
     padding: 12px;
