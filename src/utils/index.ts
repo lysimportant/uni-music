@@ -2,6 +2,7 @@ export * from "./audio";
 export * from "./format";
 export * from "./debounce";
 export * from "./navigate";
+export * from "./cache";
 /**
  *返回一个字符串
  * @param name 名字

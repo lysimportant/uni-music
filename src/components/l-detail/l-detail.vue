@@ -5,6 +5,7 @@
         <text @click="backClick" class="arrow icon-fanhui"> </text>
       </template>
       <template #center><text></text></template>
+      <template #right><text></text></template>
     </nav-bar>
     <view class="detail-content">
       <view class="detail-content__header">
@@ -36,10 +37,7 @@
         <slot name="body"></slot>
       </view>
     </view>
-    <player-controller
-      bottom="0"
-      @show-list="isShow = !isShow"
-    ></player-controller>
+    <player-controller bottom="0" @show-list="isShow = !isShow"></player-controller>
     <music-list v-model="isShow"></music-list>
   </view>
 </template>
@@ -109,7 +107,7 @@ function backClick() {
               border-radius: 50%;
             }
             text {
-              color: var(--default-color);
+              color: #fff;
               font-size: 25rpx;
             }
           }
@@ -118,6 +116,7 @@ function backClick() {
               padding: 3rpx 8rpx;
               margin-right: 10rpx;
               border-radius: 10rpx;
+              font-size: 20rpx;
               background-color: rgba(255, 255, 255, 0.3);
             }
           }

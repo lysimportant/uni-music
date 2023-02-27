@@ -12,13 +12,7 @@ import {
   getDjAllDetailService
 } from "@/service/dj";
 import { defineStore } from "pinia";
-import {
-  loadMusic,
-  playMusic,
-  pauseMusic,
-  formatLrc,
-  handleBackgroundAudio
-} from "@/utils";
+import { loadMusic, playMusic, pauseMusic, formatLrc, handleBackgroundAudio } from "@/utils";
 import player from "@/utils/audio";
 import type IMusicStore from "./type";
 
@@ -63,12 +57,7 @@ const useMusicStore = defineStore("music", {
     currentPlayIndex: 0
   }),
   actions: {
-    async getMusicURLByIdAction(
-      id: string,
-      type?: number,
-      djId?: number,
-      single_flag?: boolean
-    ) {
+    async getMusicURLByIdAction(id: string, type?: number, djId?: number, single_flag?: boolean) {
       try {
         pauseMusic((falg: boolean) => {
           this.isPlayer = falg;
@@ -118,11 +107,7 @@ const useMusicStore = defineStore("music", {
           });
           // 歌手聊表.name
           this.coverUrl = song.al.picUrl; // 歌曲封面
-          handleBackgroundAudio(
-            this.name,
-            this.authorName.join("/"),
-            this.coverUrl
-          );
+          handleBackgroundAudio(this.name, this.authorName.join("/"), this.coverUrl);
           // 获取歌词
           const lrsRed = await getMusicLrcService(id);
           const lrc = formatLrc(lrsRed.lrc.lyric);
@@ -146,15 +131,9 @@ const useMusicStore = defineStore("music", {
 
           this.duration = res.program.duration; // 时长
 
-          handleBackgroundAudio(
-            this.name,
-            this.authorName.join("/"),
-            this.coverUrl
-          );
+          handleBackgroundAudio(this.name, this.authorName.join("/"), this.coverUrl);
 
-          const { data }: any = await getDjDetailService(
-            this.currentDj.radio.id
-          );
+          const { data }: any = await getDjDetailService(this.currentDj.radio.id);
           this.currentDj.radio.name = data.name;
           this.currentDj.radio.coverUrl = data.picUrl;
           this.currentDj.radio.updatedTime = data.lastProgramCreateTime;
@@ -205,8 +184,8 @@ const useMusicStore = defineStore("music", {
       const res = await getMusicSongDetailService(id);
       this.songDetail = res.playlist;
 
-      const mids = res.playlist.trackIds.map((item: any) => item.id); // 数据多
-      // const mids = res.playlist.tracks.map((item: any) => item.id); // 数据少
+      // const mids = res.playlist.trackIds.map((item: any) => item.id); // 数据多
+      const mids = res.playlist.tracks.map((item: any) => item.id); // 数据少
       getMusicDetailByIdService(mids).then(async (res) => {
         const urlIDS = res.songs.map((item: any) => item.id);
         const urlRes = await getMusicURLByIdService(urlIDS);
@@ -257,12 +236,9 @@ const useMusicStore = defineStore("music", {
       if (index == undefined) {
         console.log("first 播放到下一个: ", index);
         this.type = type;
-        const _music = this.playList.findIndex(
-          (item: any) => item.id === payload.id
-        );
+        const _music = this.playList.findIndex((item: any) => item.id === payload.id);
         if (_music >= 0) {
-          const { name, id, authorName, coverUrl, duration, url } =
-            this.playList[_music];
+          const { name, id, authorName, coverUrl, duration, url } = this.playList[_music];
           this.name = name;
           this.id = id;
           this.authorName = authorName;
@@ -277,8 +253,7 @@ const useMusicStore = defineStore("music", {
           }
         }
       } else {
-        const { name, id, authorName, coverUrl, duration, url } =
-          this.playList[index];
+        const { name, id, authorName, coverUrl, duration, url } = this.playList[index];
         this.name = name;
         this.id = id;
         this.authorName = authorName;
@@ -292,11 +267,7 @@ const useMusicStore = defineStore("music", {
           this.lrcs = lrc;
         }
       }
-      handleBackgroundAudio(
-        this.name,
-        this.authorName.join("/"),
-        this.coverUrl
-      );
+      handleBackgroundAudio(this.name, this.authorName.join("/"), this.coverUrl);
       setTimeout(() => {
         loadMusic(this.url, (flag: boolean) => {
           this.isPlayer = flag;

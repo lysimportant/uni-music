@@ -1,5 +1,9 @@
 <template>
-  <view class="nav-bar" :class="{ top: top }">
+  <view
+    class="nav-bar"
+    :style="{ background: top ? '#f7f6fb' : 'transparent' }"
+    :class="{ top: top }"
+  >
     <!-- #ifdef MP-WEIXIN || APP-PLUS -->
     <view class="placeholder" />
     <!-- #endif -->
@@ -7,7 +11,7 @@
     <view class="content">
       <view class="left" @click="handleLeftClick">
         <slot name="left">
-          <view class="iconfont icon-menu" ></view>
+          <view class="iconfont icon-menu"></view>
         </slot>
       </view>
       <view class="center" @click="handleCenterClick">
@@ -42,7 +46,7 @@ withDefaults(
     tip?: string;
     top?: boolean;
     contentHeight?: string;
-    disabled?: boolean
+    disabled?: boolean;
   }>(),
   {
     tip: "等待操作",
@@ -67,7 +71,6 @@ function handleRightClick() {
 .nav-bar {
   position: relative;
   z-index: 2;
-
   .placeholder {
     height: v-bind("commonStore.statusBarHeight");
   }

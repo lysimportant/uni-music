@@ -2,53 +2,95 @@
   <view class="search">
     <search-header @search-event="handleHistoryClick"></search-header>
     <view class="history">
-      <view class="header">搜索历史</view>
+      <view class="header">
+        <text>搜索历史</text>
+        <text class="icon-del" @click.stop="handleRemoveHistoryClick"></text>
+      </view>
       <view class="content">
-        <text class="tag" @click="handleHistoryClick('勾指起誓')">勾指起誓</text>
-        <text class="tag">勾指起誓</text>
-        <text class="tag">勾指起誓</text>
-        <text class="tag">勾指起誓</text>
+        <template v-for="item of history">
+          <text class="tag over-ellipsis" @click="handleHistoryClick(item)">
+            {{ item }}
+            <text class></text>
+          </text>
+        </template>
       </view>
     </view>
-    <view scroll-x scroll-with-animation class="recommend-list">
-      <template v-for="itemy of list">
-        <view class="recommend-list__content">
-          <view class="header title_h2">{{ itemy }}</view>
-          <view class="body">
-            <template v-for="(itemx, index) of searchStore.searchHotList">
-              <view class="item" @click="handleItemClick(itemy, itemx)">
-                <text class="index" :class="index < 3 && 'active'">{{ index + 1 }}</text>
-                <text class="name over-ellipsis">{{ itemx.searchWord }}</text>
-              </view>
-            </template>
-          </view>
-        </view>
+    <view class="recommend-list">
+      <template v-for="(itemy, indexy) of list">
+        <template v-if="indexy === 0">
+          <search-hot
+            :list="searchStore.searchHotList"
+            @song="handleHistoryClick"
+            :typelist="list"
+            :listname="itemy"
+          ></search-hot>
+        </template>
+        <!--  -->
+        <template v-if="indexy === 1">
+          <search-hot
+            :typelist="list"
+            @dj="handleDJEvent"
+            :list="searchStore.searchHotDJList"
+            :listname="itemy"
+          ></search-hot>
+        </template>
+        <template v-if="indexy === 2">
+          <search-hot
+            :typelist="list"
+            :list="searchStore.searchHotDJList"
+            :listname="itemy"
+          ></search-hot>
+        </template>
       </template>
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
-import { onLoad } from "@dcloudio/uni-app";
+import { ref } from "vue";
+import { onShow } from "@dcloudio/uni-app";
 import { useSearchStore } from "@/store";
-import { useNavigate } from "@/utils";
+import { cache, useNavigate } from "@/utils";
 import SearchHeader from "@/subSearch/components/search-header/search-header.vue";
+import SearchHot from "@/subSearch/components/search-hot/search-hot.vue";
 const searchStore = useSearchStore();
 
-const list = ["热搜榜", "有声书榜 接口问题没实现", "有声书榜 接口问题没实现"];
-function handleItemClick(type: string, item: any) {
-  if (type === list[0]) {
-    handleHistoryClick(item.searchWord);
-  }
-}
+const list = ["热搜榜", "播客", "播客"];
+const history = ref<string[]>([]);
 function handleHistoryClick(val: string) {
+  const _history = cache.get("search-history");
+  if (_history) {
+    cache.set("search-history", _history + val + ",");
+  } else {
+    cache.set("search-history", val + ",");
+  }
   useNavigate("page", "/subSearch/content/content", { key: val });
 }
+function handleRemoveHistoryClick() {
+  console.log("删除历史记录");
+  cache.remove("search-history");
+  history.value = [];
+  setTimeout(() => {
+    setHistory();
+  });
+}
 
-onLoad(function (options: any) {
-  console.log(options.key);
+function handleDJEvent(item: any) {
+  useNavigate("page", "/subDetail/dj-detail/dj-detail", { cid: item.id });
+}
+
+onShow(() => {
   searchStore.getSearchHostListAction();
+  setHistory();
 });
+
+function setHistory() {
+  const _history: string = cache.get("search-history");
+  console.log(_history);
+  if (_history) {
+    history.value = Array.from(new Set(_history.split(","))).filter((item: string) => item !== "");
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -56,44 +98,28 @@ onLoad(function (options: any) {
   background: #f7f8fc;
 
   .history {
-    padding: 20px;
+    padding: 0 20px 10px;
     .header {
       margin: 10px 0;
       font-weight: 600;
+      display: flex;
+      justify-content: space-between;
     }
     .tag {
+      display: inline-block;
       background: #fff;
       padding: 5px;
       border-radius: 5px;
       margin-right: 5px;
+      margin: 10rpx;
+      margin-left: 0;
     }
   }
   .recommend-list {
     margin-top: 20px;
     overflow-x: auto;
     white-space: nowrap;
-    .recommend-list__content {
-      display: inline-block;
-      width: 65%;
-      margin-left: 20px;
-      background: #ffffff;
-      padding: 10px;
-      border-radius: 10px;
-      .header {
-        font-weight: 600;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #cccccc;
-      }
-      .body {
-        .item {
-          margin: 10px 0;
-          padding: 5px 0;
-          .index {
-            margin: 0 10px;
-          }
-        }
-      }
-    }
+    vertical-align: top;
   }
   .active {
     color: red;

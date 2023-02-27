@@ -38,3 +38,7 @@ export function getReommendDjService() {
 export function getDjAllDetailService(id: any) {
   return hjRequest.get({ url: `/dj/program?rid=${id}` });
 }
+
+export function getSearchDJListService() {
+  return hjRequest.get({ url: `/dj/toplist?limit=20` });
+}

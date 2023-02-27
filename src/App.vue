@@ -21,9 +21,13 @@
 }
 
 .over-ellipsis {
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis; /* 弹性伸缩盒子模型显示*/
+  display: -webkit-box;
+  /* 限制在一个块元素显示的文本的行数*/
+  -webkit-line-clamp: 1;
+  /*大设置或检索伸缩盒对象的子元素的排列方式*/
+  -webkit-box-orient: vertical;
 }
 .fxied-box {
   position: fixed;
@@ -49,8 +53,8 @@
 }
 
 .animation_rotate {
-  -webkit-animation: my_rotate 5s linear infinite; /* Chrome, Safari, Opera */
-  animation: my_rotate 5s linear infinite;
+  -webkit-animation: my_rotate 15s linear infinite; /* Chrome, Safari, Opera */
+  animation: my_rotate 15s linear infinite;
 }
 
 @keyframes my_rotate {

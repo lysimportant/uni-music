@@ -1,8 +1,7 @@
 <template>
   <view class="content">
     <view :class="{ bg: isTop }"></view>
-    <nav-bar @center="handleSearchClick" disabled :top="!isTop" :tip="searchKey">
-    </nav-bar>
+    <nav-bar @center="handleSearchClick" disabled :top="!isTop" :tip="searchKey"> </nav-bar>
     <my-swiper
       height="350px"
       indicator="bottomLeft"
@@ -36,8 +35,7 @@ const isShow = ref(false);
 const indexStore = useIndexStore();
 const commonStore = useCommonStore();
 indexStore.getIndexDataAction();
-const { banners, discoverIcons, songs, newSongs, djList, searchKey } =
-  storeToRefs(indexStore);
+const { banners, discoverIcons, songs, newSongs, djList, searchKey } = storeToRefs(indexStore);
 const isTop = ref(true);
 onPageScroll(({ scrollTop }) => {
   if (scrollTop === 0) {

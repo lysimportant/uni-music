@@ -78,22 +78,18 @@
 <script lang="ts" setup>
 import { storeToRefs } from "pinia";
 import { useMusicStore } from "@/store";
-import { formatCount, formatDate } from "@/utils";
+import { formatCount, formatDate, useNavigate } from "@/utils";
 import { computed, ref } from "vue";
 const musicStore = useMusicStore();
 const currentTab = ref(0);
 const { currentDj, name } = storeToRefs(musicStore);
 const countCmp = computed(() => formatCount);
 function handleJumpClick() {
-  uni.navigateTo({
-    url: `/subDetail/dj-detail/dj-detail?cid=${currentDj.value.radio.id}`
-  });
+  useNavigate("page", "/subDetail/dj-detail/dj-detail", { cid: currentDj.value.radio.id });
 }
 
 function handleRecommendClick(item: any) {
-  uni.navigateTo({
-    url: `/subDetail/dj-detail/dj-detail?cid=${item.id}`
-  });
+  useNavigate("page", "/subDetail/dj-detail/dj-detail", { cid: item.id });
 }
 
 const list = [
