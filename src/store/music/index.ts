@@ -207,7 +207,10 @@ const useMusicStore = defineStore("music", {
       const res = await getDjAllDetailService(id);
       const urlIDS = res.programs.map((item: any) => item.mainTrackId);
       const urlRes = await getMusicURLByIdService(urlIDS);
-      this.playList = res.programs.map((item: any, index: number) => ({
+
+      const detail = await getDjDetailService(res.programs[0].radio.id);
+      this.DJDetail = detail.data;
+      this.DJDetail.alls = res.programs.map((item: any, index: number) => ({
         id: item.id,
         djID: item.mainTrackId,
         name: item.name,
@@ -220,9 +223,7 @@ const useMusicStore = defineStore("music", {
         authorName: item.mainSong.artists.map((item: any) => item.name),
         url: urlRes.data[index].url
       }));
-
-      const detail = await getDjDetailService(res.programs[0].radio.id);
-      this.DJDetail = detail.data;
+      // this.playList =
     },
     // 切换   payload 对象  type 播放模式 0歌1播客  index 切换索引
     async playListToggleActions(payload: any, type = 0, index?: number) {
