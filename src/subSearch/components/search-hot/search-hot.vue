@@ -2,7 +2,7 @@
   <view class="recommend-list__content">
     <view class="header title_h2">{{ listname }}</view>
     <view class="body">
-      <template v-for="(itemx, index) of list">
+      <template v-for="(itemx, index) of list" :key="index">
         <view class="item over-ellipsis" @click="handleItemClick(listname, itemx)">
           <text class="index" :class="index < 3 && 'active'">{{ index + 1 }}</text>
           <text class="name">{{ itemx.name }}</text>

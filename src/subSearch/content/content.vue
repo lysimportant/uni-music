@@ -10,9 +10,10 @@
       @change="handleSearchEvent"
       :list="list"
     >
+      1
       <template #single>
         <view class="single">
-          <template v-for="item of searchStore.searchList">
+          <template v-for="(item, index) of searchStore.searchList" :key="index">
             <song-peice-item :show-pic="false" :item="item"></song-peice-item>
           </template>
         </view>
@@ -20,7 +21,7 @@
 
       <template #songs>
         <view class="songs">
-          <template v-for="item of searchStore.searchSongs">
+          <template v-for="(item, index) of searchStore.searchSongs" :key="index">
             <view class="songs-item" @click="handleItemClick(item)">
               <image class="image" :src="item.picUrl" />
               <view class="info">
@@ -31,7 +32,7 @@
                   <text class="text">播放{{ formatCountCmp(item.playCount) }}次</text>
                 </view>
                 <view class="tags">
-                  <template v-for="tag of item.officialTags">
+                  <template v-for="(tag, indey) of item.officialTags" :key="indey">
                     <text class="tag"> {{ tag }}</text>
                   </template>
                 </view>

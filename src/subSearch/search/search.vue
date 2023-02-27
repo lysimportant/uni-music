@@ -7,7 +7,7 @@
         <text class="icon-del" @click.stop="handleRemoveHistoryClick"></text>
       </view>
       <view class="content">
-        <template v-for="item of history">
+        <template v-for="(item, index) of history" :key="index">
           <text class="tag over-ellipsis" @click="handleHistoryClick(item)">
             {{ item }}
             <text class></text>
@@ -16,7 +16,7 @@
       </view>
     </view>
     <view class="recommend-list">
-      <template v-for="(itemy, indexy) of list">
+      <template v-for="(itemy, indexy) of list" :key="indexy">
         <template v-if="indexy === 0">
           <search-hot
             :list="searchStore.searchHotList"
